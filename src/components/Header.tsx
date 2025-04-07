@@ -2,9 +2,13 @@
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, Menu, X, MapPin, Flower } from 'lucide-react';
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 
-const Header = () => {
+interface HeaderProps {
+  userMenu?: ReactNode;
+}
+
+const Header = ({ userMenu }: HeaderProps) => {
   const { totalItems } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -31,8 +35,11 @@ const Header = () => {
             </Link>
           </nav>
           
-          {/* Mobile Menu Button */}
           <div className="flex items-center space-x-4">
+            {/* User Menu */}
+            {userMenu}
+            
+            {/* Cart Icon */}
             <Link to="/cart" className="relative hover:scale-110 transition-transform duration-200">
               <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-bloom-pink transition-colors" />
               {totalItems > 0 && (
@@ -41,6 +48,8 @@ const Header = () => {
                 </span>
               )}
             </Link>
+            
+            {/* Mobile Menu Button */}
             <button 
               className="md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
