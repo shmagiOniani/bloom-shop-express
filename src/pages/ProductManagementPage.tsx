@@ -38,11 +38,11 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { useAuth } from '@/context/AuthContext';
-import { Product, productData } from '../data/products';
+import { Product, products } from '../data/products';
 import { Package, Edit, Plus, Trash, Image } from "lucide-react";
 
 const ProductManagementPage = () => {
-  const [products, setProducts] = useState<Product[]>(productData);
+  const [products, setProducts] = useState<Product[]>(products);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const { toast } = useToast();
   const { hasRole } = useAuth();
@@ -52,11 +52,13 @@ const ProductManagementPage = () => {
   const form = useForm<Product>({
     defaultValues: {
       id: 0,
+      storeId: 1,
       name: "",
       description: "",
       price: 0,
       image: "",
-      category: "",
+      category: "bouquets" as "bouquets" | "singles" | "arrangements",
+      featured: false,
     }
   });
   
@@ -69,11 +71,13 @@ const ProductManagementPage = () => {
     } else {
       form.reset({
         id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+        storeId: 1,
         name: "",
         description: "",
         price: 0,
         image: "https://images.unsplash.com/photo-1533616688419-b7a585564566",
-        category: "",
+        category: "bouquets" as "bouquets" | "singles" | "arrangements",
+        featured: false,
       });
     }
   }, [editingProduct, form, products]);
@@ -124,13 +128,11 @@ const ProductManagementPage = () => {
     form.reset();
   };
 
-  const categories = [
-    "Bouquets",
-    "Plants",
-    "Vases",
-    "Gifts",
-    "Arrangements",
-    "Seasonal"
+  // Fixed the categories to match the exact types from Product interface
+  const categories: Array<"bouquets" | "singles" | "arrangements"> = [
+    "bouquets",
+    "singles",
+    "arrangements"
   ];
 
   if (!hasRole(['manager', 'admin'])) {
@@ -211,7 +213,7 @@ const ProductManagementPage = () => {
                           <FormLabel>Category</FormLabel>
                           <Select 
                             onValueChange={field.onChange} 
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <FormControl>
                               <SelectTrigger>
