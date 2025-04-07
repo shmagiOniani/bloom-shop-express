@@ -22,7 +22,7 @@ const Header = ({ userMenu }: HeaderProps) => {
           </Link>
           
           {/* Desktop Navigation */}
-          {/* <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-700 hover:text-bloom-pink transition-colors hover:scale-105 transform duration-200">
               Home
             </Link>
@@ -33,7 +33,7 @@ const Header = ({ userMenu }: HeaderProps) => {
               <MapPin className="h-4 w-4 mr-1" />
               Stores
             </Link>
-          </nav> */}
+          </nav>
           
           <div className="flex items-center space-x-4">
             {/* User Menu */}

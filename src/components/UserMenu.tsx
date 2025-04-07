@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { LogIn, LogOut, Settings, ShieldCheck, User, Store } from 'lucide-react';
+import { LogIn, LogOut, Settings, ShieldCheck, User, Store, Package } from 'lucide-react';
 
 const UserMenu = () => {
   const { user, logout, isAuthenticated, hasRole } = useAuth();
@@ -68,6 +68,12 @@ const UserMenu = () => {
               <DropdownMenuItem className="cursor-pointer">
                 <Store className="mr-2 h-4 w-4" />
                 <span>Store Management</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link to="/product-management">
+              <DropdownMenuItem className="cursor-pointer">
+                <Package className="mr-2 h-4 w-4" />
+                <span>Product Management</span>
               </DropdownMenuItem>
             </Link>
             {hasRole('admin') && (

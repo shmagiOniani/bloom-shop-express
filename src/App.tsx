@@ -15,6 +15,7 @@ import ThankYouPage from "./pages/ThankYouPage";
 import StoresPage from "./pages/StoresPage";
 import StoreDetailPage from "./pages/StoreDetailPage";
 import StoreManagementPage from "./pages/StoreManagementPage";
+import ProductManagementPage from "./pages/ProductManagementPage";
 import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import LoginPage from "./pages/LoginPage";
@@ -64,6 +65,14 @@ const App = () => (
                   element={
                     <ProtectedRoute requiredRoles={['manager', 'admin']}>
                       <StoreManagementPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/product-management" 
+                  element={
+                    <ProtectedRoute requiredRoles={['manager', 'admin']}>
+                      <ProductManagementPage />
                     </ProtectedRoute>
                   } 
                 />
