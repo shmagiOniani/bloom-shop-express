@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -88,14 +87,14 @@ const StoresPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [hoveredStore, setHoveredStore] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
-  
+  const navigate = useNavigate();
+
   const filteredStores = storeData.filter(store => 
     store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.specialty.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
-  // Handle keyboard shortcut for search
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
@@ -142,7 +141,6 @@ const StoresPage = () => {
           </div>
         </div>
         
-        {/* Command Dialog for quick search */}
         <CommandDialog open={open} onOpenChange={setOpen}>
           <CommandInput placeholder="Search for stores..." />
           <CommandList>

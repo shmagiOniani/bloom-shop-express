@@ -1,4 +1,3 @@
-
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,8 +19,7 @@ const StoreDetailPage = () => {
   const map = useRef<mapboxgl.Map | null>(null);
   const featuredProducts = getFeaturedProducts().slice(0, 3);
   
-  // Placeholder coordinates - in a real app, these would come from geocoding the address
-  const storeCoordinates = {
+  const storeCoordinates: [number, number] = {
     1: [-122.3321, 47.6062], // Seattle Downtown
     2: [-122.2006, 47.6101], // Bellevue
     3: [-122.3215, 47.7041], // Northgate
@@ -32,7 +30,6 @@ const StoreDetailPage = () => {
   useEffect(() => {
     if (!mapContainer.current || !store) return;
     
-    // Initialize Mapbox - you would replace this with your actual token
     mapboxgl.accessToken = 'pk.eyJ1IjoicGxhY2Vob2xkZXIiLCJhIjoiY2xvYWRpbmciOiJtYXAifQ.123456789';
     
     map.current = new mapboxgl.Map({
@@ -45,7 +42,6 @@ const StoreDetailPage = () => {
     map.current.on('load', () => {
       setMapLoaded(true);
       
-      // Add marker for store location
       if (map.current) {
         new mapboxgl.Marker({ color: '#ff75a0' }) // bloom-pink color
           .setLngLat(storeCoordinates)
@@ -53,7 +49,6 @@ const StoreDetailPage = () => {
       }
     });
     
-    // Cleanup
     return () => {
       map.current?.remove();
     };
@@ -74,13 +69,11 @@ const StoreDetailPage = () => {
   return (
     <div className="py-8 md:py-12 overflow-hidden">
       <div className="bloom-container">
-        {/* Back button */}
         <Link to="/stores" className="inline-flex items-center text-bloom-green hover:text-bloom-pink transition-colors mb-6">
           <ArrowLeft className="mr-1" size={18} />
           <span>All Stores</span>
         </Link>
         
-        {/* Store title */}
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold text-bloom-green mb-3 relative inline-block">
             {store.name}
@@ -92,7 +85,6 @@ const StoreDetailPage = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Store information */}
           <Card className="lg:col-span-1 overflow-hidden border-2 border-gray-100 hover:border-bloom-pink transition-all duration-300">
             <div className="h-4 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
             <CardHeader className="pb-2">
@@ -138,7 +130,6 @@ const StoreDetailPage = () => {
             </CardContent>
           </Card>
           
-          {/* Map */}
           <div className="lg:col-span-2">
             <Card className="overflow-hidden border-2 border-gray-100 h-[300px] md:h-[400px]">
               {!mapLoaded && (
@@ -151,7 +142,6 @@ const StoreDetailPage = () => {
           </div>
         </div>
         
-        {/* Featured products section */}
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-bloom-green mb-6 text-center">
             <span className="relative inline-block">
@@ -173,7 +163,6 @@ const StoreDetailPage = () => {
           </div>
         </div>
         
-        {/* Fun decoration elements */}
         <div className="absolute -bottom-24 -right-24 w-48 h-48 rounded-full bg-bloom-light-pink opacity-10 animate-pulse"></div>
         <div className="absolute top-32 -left-24 w-32 h-32 rounded-full bg-bloom-light-green opacity-10"></div>
       </div>
