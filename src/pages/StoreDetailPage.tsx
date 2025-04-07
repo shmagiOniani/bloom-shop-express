@@ -1,3 +1,4 @@
+
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,13 +20,19 @@ const StoreDetailPage = () => {
   const map = useRef<mapboxgl.Map | null>(null);
   const featuredProducts = getFeaturedProducts().slice(0, 3);
   
-  const storeCoordinates: [number, number] = {
-    1: [-122.3321, 47.6062], // Seattle Downtown
-    2: [-122.2006, 47.6101], // Bellevue
-    3: [-122.3215, 47.7041], // Northgate
-    4: [-122.4400, 47.2529], // Tacoma
-    5: [-122.3132, 47.6205]  // Capitol Hill
-  }[storeId] || [-122.3321, 47.6062];
+  // Using a proper lookup function to get coordinates as a tuple
+  const getStoreCoordinates = (id: number): [number, number] => {
+    const coordinates: Record<number, [number, number]> = {
+      1: [-122.3321, 47.6062], // Seattle Downtown
+      2: [-122.2006, 47.6101], // Bellevue
+      3: [-122.3215, 47.7041], // Northgate
+      4: [-122.4400, 47.2529], // Tacoma
+      5: [-122.3132, 47.6205]  // Capitol Hill
+    };
+    return coordinates[id] || [-122.3321, 47.6062]; // Default to Seattle Downtown if ID not found
+  };
+  
+  const storeCoordinates = getStoreCoordinates(storeId);
   
   useEffect(() => {
     if (!mapContainer.current || !store) return;
