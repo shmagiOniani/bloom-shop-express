@@ -52,7 +52,11 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-quicksand;
+  }
+  
+  h1, h2, h3, .playful-text {
+    @apply font-amatic font-bold;
   }
   
   .bloom-container {
@@ -64,14 +68,39 @@
   }
 
   .bloom-button {
-    @apply px-4 py-2 bg-bloom-pink text-white rounded-md hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center;
+    @apply px-4 py-2 bg-bloom-pink text-white rounded-full hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center hover:scale-105 shadow-sm;
   }
   
   .bloom-button-secondary {
-    @apply px-4 py-2 bg-bloom-green text-white rounded-md hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center;
+    @apply px-4 py-2 bg-bloom-green text-white rounded-full hover:bg-opacity-90 transition-all duration-300 flex items-center justify-center hover:scale-105 shadow-sm;
   }
 
   .bloom-button-outline {
-    @apply px-4 py-2 border border-bloom-pink text-bloom-pink rounded-md hover:bg-bloom-light-pink hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center;
+    @apply px-4 py-2 border-2 border-bloom-pink text-bloom-pink rounded-full hover:bg-bloom-light-pink hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center hover:scale-105;
   }
+}
+
+/* Font families */
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url(https://fonts.gstatic.com/s/quicksand/v28/6xK-dSZaM9iE8KbpRA_LJ3z8mH9BOJvgkP8o58m-wi40.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Amatic SC';
+  font-style: normal;
+  font-weight: 400 700;
+  src: url(https://fonts.gstatic.com/s/amaticsc/v24/TUZyzwprpvBS1izr_vOEDuSfQZQ.woff2) format('woff2');
+}
+
+.font-quicksand {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.font-amatic {
+  font-family: 'Amatic SC', cursive;
+  font-size: 1.4em;
+  letter-spacing: 0.5px;
 }

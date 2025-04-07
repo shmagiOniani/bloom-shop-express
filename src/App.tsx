@@ -11,6 +11,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ThankYouPage from "./pages/ThankYouPage";
+import StoresPage from "./pages/StoresPage";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 
@@ -31,6 +32,7 @@ const App = () => (
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
+              <Route path="/stores" element={<StoresPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
