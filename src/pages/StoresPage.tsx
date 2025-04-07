@@ -1,10 +1,20 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Flower, MapPin, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Flower, MapPin, Phone, ChevronRight } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { 
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+} from "@/components/ui/command";
 
-interface Store {
+export interface Store {
   id: number;
   name: string;
   address: string;
@@ -16,7 +26,7 @@ interface Store {
   specialty: string;
 }
 
-const storeData: Store[] = [
+export const storeData: Store[] = [
   {
     id: 1,
     name: "Bloom Express Downtown",
@@ -77,12 +87,26 @@ const storeData: Store[] = [
 const StoresPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [hoveredStore, setHoveredStore] = useState<number | null>(null);
+  const [open, setOpen] = useState(false);
   
   const filteredStores = storeData.filter(store => 
     store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
     store.specialty.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
+  // Handle keyboard shortcut for search
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
   
   return (
     <div className="py-8 md:py-12">
@@ -107,8 +131,44 @@ const StoresPage = () => {
               className="pl-10 py-6 rounded-full border-bloom-pink border-2 focus:border-bloom-green shadow-sm"
             />
             <Flower className="absolute left-3 top-1/2 transform -translate-y-1/2 text-bloom-pink h-5 w-5" />
+            <button 
+              onClick={() => setOpen(true)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-bloom-pink transition-colors bg-white/80 rounded-full p-1"
+            >
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+            </button>
           </div>
         </div>
+        
+        {/* Command Dialog for quick search */}
+        <CommandDialog open={open} onOpenChange={setOpen}>
+          <CommandInput placeholder="Search for stores..." />
+          <CommandList>
+            <CommandEmpty>No stores found.</CommandEmpty>
+            <CommandGroup heading="Stores">
+              {storeData.map(store => (
+                <CommandItem
+                  key={store.id}
+                  onSelect={() => {
+                    navigate(`/stores/${store.id}`);
+                    setOpen(false);
+                  }}
+                  className="flex items-center gap-2 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-bloom-pink" />
+                    <span>{store.name}</span>
+                    <span className="text-sm text-muted-foreground ml-2">
+                      {store.city}
+                    </span>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </CommandDialog>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredStores.map((store) => (
@@ -144,6 +204,17 @@ const StoresPage = () => {
                   <div>
                     <p className="font-medium text-sm text-gray-700">Hours:</p>
                     <p className="text-sm">{store.hours}</p>
+                  </div>
+                  <div className="pt-2">
+                    <Link to={`/stores/${store.id}`}>
+                      <Button 
+                        className="w-full bg-bloom-green hover:bg-bloom-green/90 text-white"
+                        variant="default"
+                      >
+                        View Store Details
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </CardContent>

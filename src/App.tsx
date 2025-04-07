@@ -12,6 +12,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ThankYouPage from "./pages/ThankYouPage";
 import StoresPage from "./pages/StoresPage";
+import StoreDetailPage from "./pages/StoreDetailPage";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/thank-you" element={<ThankYouPage />} />
               <Route path="/stores" element={<StoresPage />} />
+              <Route path="/stores/:id" element={<StoreDetailPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
