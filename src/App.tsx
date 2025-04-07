@@ -15,6 +15,8 @@ import ThankYouPage from "./pages/ThankYouPage";
 import StoresPage from "./pages/StoresPage";
 import StoreDetailPage from "./pages/StoreDetailPage";
 import StoreManagementPage from "./pages/StoreManagementPage";
+import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
 import LoginPage from "./pages/LoginPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFound from "./pages/NotFound";
@@ -41,6 +43,22 @@ const App = () => (
                 <Route path="/thank-you" element={<ThankYouPage />} />
                 <Route path="/stores" element={<StoresPage />} />
                 <Route path="/stores/:id" element={<StoreDetailPage />} />
+                <Route 
+                  path="/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/settings" 
+                  element={
+                    <ProtectedRoute>
+                      <SettingsPage />
+                    </ProtectedRoute>
+                  } 
+                />
                 <Route 
                   path="/store-management" 
                   element={
