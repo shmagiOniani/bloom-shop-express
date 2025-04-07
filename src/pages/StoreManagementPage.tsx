@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
@@ -354,6 +353,14 @@ const StoreManagementPage = () => {
                           onClick={() => handleEdit(store)}
                         >
                           <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="bg-bloom-light-green hover:bg-bloom-green hover:text-white"
+                          onClick={() => navigate(`/product-management`)}
+                        >
+                          <Plus className="h-4 w-4" />
                         </Button>
                         <Button 
                           size="sm" 

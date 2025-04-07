@@ -266,6 +266,23 @@ const ProductManagementPage = () => {
                                 size="icon"
                                 variant="outline"
                                 className="flex-shrink-0"
+                                onClick={() => {
+                                  const input = document.createElement('input');
+                                  input.type = 'file';
+                                  input.accept = 'image/*';
+                                  input.onchange = () => {
+                                    const file = input.files?.[0];
+                                    
+                                    if (file) {
+                                      const reader = new FileReader();
+                                      reader.onload = () => {
+                                        field.onChange(reader.result as string);
+                                      };
+                                      reader.readAsDataURL(file);
+                                    }
+                                  };
+                                  input.click();
+                                }}
                               >
                                 <Image className="h-4 w-4" />
                               </Button>
