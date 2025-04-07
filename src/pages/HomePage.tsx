@@ -1,7 +1,7 @@
-
 import { Link } from 'react-router-dom';
 import { getFeaturedProducts, getBestSellers } from '../data/products';
 import ProductCard from '../components/ProductCard';
+import StoreCarousel from '../components/StoreCarousel';
 import { ArrowRight } from 'lucide-react';
 
 const HomePage = () => {
@@ -118,6 +118,26 @@ const HomePage = () => {
             {featuredProducts.slice(0, 4).map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Store Locations Carousel */}
+      <section className="py-16 bg-white">
+        <div className="bloom-container">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">Find Our Stores</h2>
+            <Link to="/stores" className="flex items-center text-bloom-green hover:text-bloom-pink transition-colors">
+              View All Locations <ArrowRight className="h-4 w-4 ml-1" />
+            </Link>
+          </div>
+          
+          <StoreCarousel />
+          
+          <div className="text-center mt-8">
+            <Link to="/stores" className="bloom-button-outline">
+              All Store Locations
+            </Link>
           </div>
         </div>
       </section>
