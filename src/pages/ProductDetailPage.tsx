@@ -1,11 +1,10 @@
-
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductById } from '../data/products';
 import { useCart } from '../context/CartContext';
 import { toast } from '../components/ui/use-toast';
 import { Button } from '../components/ui/button';
-import { Heart, ShoppingCart, ChevronLeft } from 'lucide-react';
+import { Heart, ShoppingCart, ChevronLeft, Store } from 'lucide-react';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,6 +40,10 @@ const ProductDetailPage = () => {
       title: "Added to Wishlist",
       description: `${product.name} has been saved to your wishlist.`,
     });
+  };
+
+  const handleVisitStore = () => {
+    navigate(`/stores/${product.storeId || 'main'}`);
   };
 
   return (
@@ -94,7 +97,7 @@ const ProductDetailPage = () => {
                   {product.occasion.map(occ => (
                     <span 
                       key={occ} 
-                      className="text-xs bg-bloom-light-pink text-bloom-pink px-2 py-1 rounded-full"
+                      className="text-xs bg-bloom-light-pink text-white px-2 py-1 rounded-full"
                     >
                       {occ}
                     </span>
@@ -129,12 +132,21 @@ const ProductDetailPage = () => {
               </Button>
               
               <Button 
+                onClick={handleVisitStore} 
+                variant="outline"
+                className="bloom-button-outline"
+              >
+                <Store className="h-5 w-5 mr-2" />
+                Visit Store
+              </Button>
+              
+              {/* <Button 
                 onClick={handleWishlist} 
                 variant="outline"
                 className="bloom-button-outline"
               >
                 <Heart className="h-5 w-5" />
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

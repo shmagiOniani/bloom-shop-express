@@ -1,5 +1,6 @@
 
 export interface Product {
+  storeId: number;
   id: number;
   name: string;
   description: string;
@@ -15,6 +16,7 @@ export interface Product {
 
 export const products: Product[] = [
   {
+    storeId: 1,
     id: 1,
     name: "Romantic Rose Bouquet",
     description: "A stunning arrangement of premium red roses. Perfect for expressing love and admiration. Each bouquet contains a dozen fresh roses with eucalyptus accents.",
@@ -28,6 +30,7 @@ export const products: Product[] = [
     city: "New York"
   },
   {
+    storeId: 2,
     id: 2,
     name: "Sunshine Daisy Mix",
     description: "Brighten someone's day with this cheerful arrangement of fresh daisies and sunflowers. A perfect gift to bring joy and warmth.",
@@ -40,6 +43,7 @@ export const products: Product[] = [
     city: "Los Angeles"
   },
   {
+    storeId: 3,
     id: 3,
     name: "Elegant White Lily",
     description: "A sophisticated single stem lily, known for its elegant appearance and subtle fragrance. A classic choice for any occasion.",
@@ -52,6 +56,7 @@ export const products: Product[] = [
     city: "Chicago"
   },
   {
+    storeId: 4,
     id: 4,
     name: "Lavender Dreams",
     description: "A beautiful bundle of fresh lavender stems, known for their calming scent and purple hue. Perfect for adding a touch of tranquility to any space.",
@@ -64,6 +69,7 @@ export const products: Product[] = [
     city: "Seattle"
   },
   {
+    storeId: 5,
     id: 5,
     name: "Classic Vase Arrangement",
     description: "A professionally designed floral arrangement in a complimentary glass vase. Features seasonal blooms in harmonious colors.",
@@ -77,6 +83,7 @@ export const products: Product[] = [
     city: "Boston"
   },
   {
+    storeId: 6,
     id: 6,
     name: "Spring Tulip Collection",
     description: "Embrace the season with this vibrant mix of colorful tulips. A fresh and lively arrangement that celebrates spring.",
@@ -89,6 +96,7 @@ export const products: Product[] = [
     city: "Portland"
   },
   {
+    storeId: 7,
     id: 7,
     name: "Orchid Elegance",
     description: "A stunning orchid plant that brings long-lasting beauty and exotic flair to any interior. Comes in a decorative pot.",
@@ -101,6 +109,7 @@ export const products: Product[] = [
     city: "San Francisco"
   },
   {
+    storeId: 8,
     id: 8,
     name: "Single Sunflower",
     description: "A cheerful single sunflower stem to brighten any day. This sunny bloom symbolizes adoration and loyalty.",
@@ -113,6 +122,7 @@ export const products: Product[] = [
     city: "Denver"
   },
   {
+    storeId: 9,
     id: 9,
     name: "Wildflower Basket",
     description: "A rustic basket filled with seasonal wildflowers, creating a natural, garden-inspired arrangement that feels fresh-picked.",
@@ -125,6 +135,7 @@ export const products: Product[] = [
     city: "Austin"
   },
   {
+    storeId: 10,
     id: 10,
     name: "Luxury Peony Bouquet",
     description: "A luxurious arrangement featuring seasonal peonies in soft pink hues. Known for their fluffy blooms and sweet fragrance.",
@@ -138,6 +149,7 @@ export const products: Product[] = [
     city: "New York"
   },
   {
+    storeId: 11,
     id: 11,
     name: "Single Rose Stem",
     description: "A classic gesture of affection, this single rose stem is perfect for expressing love or appreciation with simple elegance.",
@@ -150,6 +162,7 @@ export const products: Product[] = [
     city: "Miami"
   },
   {
+    storeId: 12,
     id: 12,
     name: "Modern White & Green",
     description: "A contemporary arrangement featuring white blooms and varied greenery. Clean, fresh, and perfect for modern interiors.",
