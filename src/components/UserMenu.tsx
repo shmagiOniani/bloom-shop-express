@@ -77,10 +77,12 @@ const UserMenu = () => {
               </DropdownMenuItem>
             </Link>
             {hasRole('admin') && (
-              <DropdownMenuItem className="cursor-pointer">
-                <ShieldCheck className="mr-2 h-4 w-4" />
-                <span>Admin Panel</span>
-              </DropdownMenuItem>
+              <Link to="/admin-panel">
+                <DropdownMenuItem className="cursor-pointer">
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  <span>Admin Panel</span>
+                </DropdownMenuItem>
+              </Link>
             )}
           </>
         )}

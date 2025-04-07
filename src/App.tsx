@@ -23,6 +23,7 @@ import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFound from "./pages/NotFound";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminPanelPage from "./pages/AdminPanelPage";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,14 @@ const App = () => (
                   element={
                     <ProtectedRoute requiredRoles={['manager', 'admin']}>
                       <ProductManagementPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-panel" 
+                  element={
+                    <ProtectedRoute requiredRoles="admin">
+                      <AdminPanelPage />
                     </ProtectedRoute>
                   } 
                 />
