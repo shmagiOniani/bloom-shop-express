@@ -5,6 +5,8 @@ import { products } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import { Input } from '@/components/ui/input';
 import { Flower, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Label } from '@/components/ui/label'; // Added missing import
+import { Checkbox } from '@/components/ui/checkbox'; // Added missing import
 import { 
   CommandDialog,
   CommandInput,
