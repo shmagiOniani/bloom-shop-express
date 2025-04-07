@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { products } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import { Input } from '@/components/ui/input';
-import { Flower, Search } from 'lucide-react';
+import { Flower, Search, SlidersHorizontal, X } from 'lucide-react';
 import { 
   CommandDialog,
   CommandInput,
@@ -14,6 +14,22 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useNavigate } from 'react-router-dom';
+import PriceRangeFilter from '@/components/PriceRangeFilter';
+import CityFilter from '@/components/CityFilter';
+import { 
+  Collapsible, 
+  CollapsibleContent, 
+  CollapsibleTrigger 
+} from "@/components/ui/collapsible";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from '@/components/ui/button';
 
 const ProductsPage = () => {
   const navigate = useNavigate();
@@ -26,6 +42,18 @@ const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
   
+  // Price filter state
+  const minAvailablePrice = Math.floor(Math.min(...products.map(p => p.price)));
+  const maxAvailablePrice = Math.ceil(Math.max(...products.map(p => p.price)));
+  const [priceRange, setPriceRange] = useState<[number, number]>([minAvailablePrice, maxAvailablePrice]);
+  
+  // City filter state
+  const availableCities = Array.from(new Set(products.map(p => p.city))).filter(Boolean) as string[];
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  
+  // Mobile filters state
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
   // Handle keyboard shortcut for search
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -56,6 +84,18 @@ const ProductsPage = () => {
       result = result.filter(product => product.category === activeCategory);
     }
     
+    // Apply price filter
+    result = result.filter(product => 
+      product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+    
+    // Apply city filter
+    if (selectedCities.length > 0) {
+      result = result.filter(product => 
+        product.city && selectedCities.includes(product.city)
+      );
+    }
+    
     // Apply sorting
     switch (activeSort) {
       case 'price-low':
@@ -74,12 +114,35 @@ const ProductsPage = () => {
     }
     
     setFilteredProducts(result);
-  }, [activeCategory, activeSort, searchTerm]);
+  }, [activeCategory, activeSort, searchTerm, priceRange, selectedCities]);
   
   // Update active category when URL param changes
   useEffect(() => {
     setActiveCategory(categoryParam);
   }, [categoryParam]);
+  
+  const handlePriceChange = (min: number, max: number) => {
+    setPriceRange([min, max]);
+  };
+  
+  const handleCityChange = (city: string, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedCities([...selectedCities, city]);
+    } else {
+      setSelectedCities(selectedCities.filter(c => c !== city));
+    }
+  };
+  
+  const clearFilters = () => {
+    setPriceRange([minAvailablePrice, maxAvailablePrice]);
+    setSelectedCities([]);
+    setActiveCategory(null);
+  };
+  
+  const hasActiveFilters = selectedCities.length > 0 || 
+                          priceRange[0] > minAvailablePrice || 
+                          priceRange[1] < maxAvailablePrice ||
+                          activeCategory !== null;
   
   return (
     <div className="py-8">
@@ -144,64 +207,302 @@ const ProductsPage = () => {
           </CommandList>
         </CommandDialog>
         
-        {/* Filters and Sorting */}
-        <div className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex flex-wrap gap-2">
-            <button 
-              className={`px-4 py-2 rounded-full text-sm ${!activeCategory ? 'bg-bloom-pink text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-              onClick={() => setActiveCategory(null)}
-            >
-              All
-            </button>
-            <button 
-              className={`px-4 py-2 rounded-full text-sm ${activeCategory === 'bouquets' ? 'bg-bloom-pink text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-              onClick={() => setActiveCategory('bouquets')}
-            >
-              Bouquets
-            </button>
-            <button 
-              className={`px-4 py-2 rounded-full text-sm ${activeCategory === 'singles' ? 'bg-bloom-pink text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-              onClick={() => setActiveCategory('singles')}
-            >
-              Single Stems
-            </button>
-            <button 
-              className={`px-4 py-2 rounded-full text-sm ${activeCategory === 'arrangements' ? 'bg-bloom-pink text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-              onClick={() => setActiveCategory('arrangements')}
-            >
-              Arrangements
-            </button>
+        <div className="flex flex-col lg:flex-row gap-8 mb-8">
+          {/* Desktop Filter Panel */}
+          <div className="hidden lg:block w-64 shrink-0 space-y-8">
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Filters</h3>
+              {hasActiveFilters && (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={clearFilters}
+                  className="text-xs text-gray-500 flex items-center"
+                >
+                  <X className="h-3 w-3 mr-1" />
+                  Clear all
+                </Button>
+              )}
+            </div>
+            
+            {/* Category Filter */}
+            <div className="space-y-3">
+              <h4 className="font-medium text-sm">Categories</h4>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="all-categories" 
+                    checked={activeCategory === null}
+                    onCheckedChange={() => setActiveCategory(null)}
+                  />
+                  <Label htmlFor="all-categories" className="text-sm cursor-pointer">All Categories</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="bouquets" 
+                    checked={activeCategory === 'bouquets'}
+                    onCheckedChange={(checked) => setActiveCategory(checked ? 'bouquets' : null)}
+                  />
+                  <Label htmlFor="bouquets" className="text-sm cursor-pointer">Bouquets</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="singles" 
+                    checked={activeCategory === 'singles'}
+                    onCheckedChange={(checked) => setActiveCategory(checked ? 'singles' : null)}
+                  />
+                  <Label htmlFor="singles" className="text-sm cursor-pointer">Single Stems</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="arrangements" 
+                    checked={activeCategory === 'arrangements'}
+                    onCheckedChange={(checked) => setActiveCategory(checked ? 'arrangements' : null)}
+                  />
+                  <Label htmlFor="arrangements" className="text-sm cursor-pointer">Arrangements</Label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              <PriceRangeFilter 
+                minPrice={minAvailablePrice} 
+                maxPrice={maxAvailablePrice} 
+                onChange={handlePriceChange} 
+              />
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              <CityFilter 
+                cities={availableCities}
+                selectedCities={selectedCities}
+                onChange={handleCityChange}
+              />
+            </div>
           </div>
           
-          <div className="flex items-center">
-            <label htmlFor="sort" className="text-sm text-gray-600 mr-2">Sort by:</label>
-            <select 
-              id="sort" 
-              className="border-gray-200 rounded-md text-sm"
-              value={activeSort}
-              onChange={(e) => setActiveSort(e.target.value)}
-            >
-              <option value="featured">Featured</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="name">Name</option>
-            </select>
+          <div className="flex-1">
+            {/* Mobile Filter Button */}
+            <div className="lg:hidden flex justify-between items-center mb-4">
+              <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1">
+                    <SlidersHorizontal className="h-4 w-4" />
+                    Filters
+                    {hasActiveFilters && (
+                      <span className="bg-bloom-pink text-white text-xs rounded-full h-5 w-5 flex items-center justify-center ml-1">
+                        !
+                      </span>
+                    )}
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-full sm:max-w-sm">
+                  <SheetHeader>
+                    <SheetTitle className="flex justify-between items-center">
+                      <span>Filters</span>
+                      {hasActiveFilters && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={clearFilters}
+                          className="text-xs text-gray-500 flex items-center"
+                        >
+                          <X className="h-3 w-3 mr-1" />
+                          Clear all
+                        </Button>
+                      )}
+                    </SheetTitle>
+                    <SheetDescription>
+                      Refine your product search
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="mt-6 space-y-6">
+                    {/* Category Filter */}
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
+                        <span>Categories</span>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pt-4 space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="mobile-all-categories" 
+                            checked={activeCategory === null}
+                            onCheckedChange={() => setActiveCategory(null)}
+                          />
+                          <Label htmlFor="mobile-all-categories" className="text-sm cursor-pointer">All Categories</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="mobile-bouquets" 
+                            checked={activeCategory === 'bouquets'}
+                            onCheckedChange={(checked) => setActiveCategory(checked ? 'bouquets' : null)}
+                          />
+                          <Label htmlFor="mobile-bouquets" className="text-sm cursor-pointer">Bouquets</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="mobile-singles" 
+                            checked={activeCategory === 'singles'}
+                            onCheckedChange={(checked) => setActiveCategory(checked ? 'singles' : null)}
+                          />
+                          <Label htmlFor="mobile-singles" className="text-sm cursor-pointer">Single Stems</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Checkbox 
+                            id="mobile-arrangements" 
+                            checked={activeCategory === 'arrangements'}
+                            onCheckedChange={(checked) => setActiveCategory(checked ? 'arrangements' : null)}
+                          />
+                          <Label htmlFor="mobile-arrangements" className="text-sm cursor-pointer">Arrangements</Label>
+                        </div>
+                      </CollapsibleContent>
+                    </Collapsible>
+                    
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
+                        <span>Price</span>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pt-4">
+                        <PriceRangeFilter 
+                          minPrice={minAvailablePrice} 
+                          maxPrice={maxAvailablePrice} 
+                          onChange={handlePriceChange} 
+                        />
+                      </CollapsibleContent>
+                    </Collapsible>
+                    
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
+                        <span>Cities</span>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="pt-4">
+                        <CityFilter 
+                          cities={availableCities}
+                          selectedCities={selectedCities}
+                          onChange={handleCityChange}
+                        />
+                      </CollapsibleContent>
+                    </Collapsible>
+                    
+                    <div className="pt-4">
+                      <Button 
+                        className="w-full bloom-button" 
+                        onClick={() => setIsFilterOpen(false)}
+                      >
+                        Apply Filters
+                      </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+              
+              <div className="flex items-center">
+                <label htmlFor="mobile-sort" className="text-sm text-gray-600 mr-2">Sort:</label>
+                <select 
+                  id="mobile-sort" 
+                  className="border-gray-200 rounded-md text-sm"
+                  value={activeSort}
+                  onChange={(e) => setActiveSort(e.target.value)}
+                >
+                  <option value="featured">Featured</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="name">Name</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* Filter Summary for Desktop */}
+            <div className="hidden lg:flex justify-between items-center mb-6">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500">
+                  {filteredProducts.length} products found
+                </span>
+                {hasActiveFilters && (
+                  <div className="flex items-center gap-2">
+                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={clearFilters}
+                      className="text-xs text-gray-500 flex items-center p-0 h-auto hover:bg-transparent"
+                    >
+                      Clear filters
+                    </Button>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex items-center">
+                <label htmlFor="desktop-sort" className="text-sm text-gray-600 mr-2">Sort by:</label>
+                <select 
+                  id="desktop-sort" 
+                  className="border-gray-200 rounded-md text-sm"
+                  value={activeSort}
+                  onChange={(e) => setActiveSort(e.target.value)}
+                >
+                  <option value="featured">Featured</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="name">Name</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* Active Filter Pills */}
+            {hasActiveFilters && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {activeCategory && (
+                  <div className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                    <span>Category: {activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}</span>
+                    <button onClick={() => setActiveCategory(null)} className="ml-1">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                
+                {(priceRange[0] > minAvailablePrice || priceRange[1] < maxAvailablePrice) && (
+                  <div className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                    <span>Price: ${priceRange[0]} - ${priceRange[1]}</span>
+                    <button onClick={() => setPriceRange([minAvailablePrice, maxAvailablePrice])} className="ml-1">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+                
+                {selectedCities.map(city => (
+                  <div key={city} className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                    <span>City: {city}</span>
+                    <button onClick={() => handleCityChange(city, false)} className="ml-1">
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {/* Products Grid */}
+            {filteredProducts.length > 0 ? (
+              <div className="product-grid">
+                {filteredProducts.map(product => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12">
+                <h3 className="text-xl font-medium">No products found</h3>
+                <p className="text-gray-500 mt-2">Try changing your filters or check back later.</p>
+                <Button 
+                  variant="outline" 
+                  className="mt-4" 
+                  onClick={clearFilters}
+                >
+                  Clear all filters
+                </Button>
+              </div>
+            )}
           </div>
         </div>
-        
-        {/* Products Grid */}
-        {filteredProducts.length > 0 ? (
-          <div className="product-grid">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-medium">No products found</h3>
-            <p className="text-gray-500 mt-2">Try changing your filters or check back later.</p>
-          </div>
-        )}
       </div>
     </div>
   );

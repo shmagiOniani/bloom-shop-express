@@ -10,6 +10,7 @@ export interface Product {
   bestSeller?: boolean;
   colors?: string[];
   occasion?: string[];
+  city?: string; // Added city property
 }
 
 export const products: Product[] = [
@@ -23,7 +24,8 @@ export const products: Product[] = [
     featured: true,
     bestSeller: true,
     colors: ["red", "green"],
-    occasion: ["anniversary", "valentines"]
+    occasion: ["anniversary", "valentines"],
+    city: "New York"
   },
   {
     id: 2,
@@ -34,7 +36,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: true,
     colors: ["yellow", "white", "green"],
-    occasion: ["birthday", "congratulations"]
+    occasion: ["birthday", "congratulations"],
+    city: "Los Angeles"
   },
   {
     id: 3,
@@ -45,7 +48,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1585226339229-20c99abed4c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: false,
     colors: ["white", "green"],
-    occasion: ["sympathy", "wedding"]
+    occasion: ["sympathy", "wedding"],
+    city: "Chicago"
   },
   {
     id: 4,
@@ -56,7 +60,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1611745179863-d85981548d51?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: true,
     colors: ["purple", "green"],
-    occasion: ["housewarming", "self-care"]
+    occasion: ["housewarming", "self-care"],
+    city: "Seattle"
   },
   {
     id: 5,
@@ -68,7 +73,8 @@ export const products: Product[] = [
     featured: false,
     bestSeller: true,
     colors: ["mixed", "green"],
-    occasion: ["birthday", "congratulations", "thank you"]
+    occasion: ["birthday", "congratulations", "thank you"],
+    city: "Boston"
   },
   {
     id: 6,
@@ -79,7 +85,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: true,
     colors: ["mixed", "green"],
-    occasion: ["spring", "birthday"]
+    occasion: ["spring", "birthday"],
+    city: "Portland"
   },
   {
     id: 7,
@@ -90,7 +97,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1566836610593-62a64888a216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: false,
     colors: ["purple", "white"],
-    occasion: ["housewarming", "congratulations"]
+    occasion: ["housewarming", "congratulations"],
+    city: "San Francisco"
   },
   {
     id: 8,
@@ -101,7 +109,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1551927411-95e412943b58?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: false,
     colors: ["yellow", "green"],
-    occasion: ["birthday", "cheer up"]
+    occasion: ["birthday", "cheer up"],
+    city: "Denver"
   },
   {
     id: 9,
@@ -112,7 +121,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1515864157334-03512f4c1eba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: true,
     colors: ["mixed", "green"],
-    occasion: ["birthday", "thank you"]
+    occasion: ["birthday", "thank you"],
+    city: "Austin"
   },
   {
     id: 10,
@@ -124,7 +134,8 @@ export const products: Product[] = [
     featured: true,
     bestSeller: true,
     colors: ["pink", "green"],
-    occasion: ["anniversary", "wedding", "luxury"]
+    occasion: ["anniversary", "wedding", "luxury"],
+    city: "New York"
   },
   {
     id: 11,
@@ -135,7 +146,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: false,
     colors: ["red", "green"],
-    occasion: ["valentines", "romance"]
+    occasion: ["valentines", "romance"],
+    city: "Miami"
   },
   {
     id: 12,
@@ -146,7 +158,8 @@ export const products: Product[] = [
     image: "https://images.unsplash.com/photo-1612360426531-bdaddbe646bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
     featured: false,
     colors: ["white", "green"],
-    occasion: ["business", "modern"]
+    occasion: ["business", "modern"],
+    city: "Chicago"
   }
 ];
 
