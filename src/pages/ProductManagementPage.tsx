@@ -38,11 +38,11 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { useAuth } from '@/context/AuthContext';
-import { Product, products } from '../data/products';
+import { Product, products as productsList } from '../data/products';
 import { Package, Edit, Plus, Trash, Image } from "lucide-react";
 
 const ProductManagementPage = () => {
-  const [products, setProducts] = useState<Product[]>(products);
+  const [products, setProducts] = useState<Product[]>(productsList);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const { toast } = useToast();
   const { hasRole } = useAuth();
