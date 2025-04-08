@@ -87,6 +87,7 @@ const translations = {
     
     // Product Management
     'productManagement.title': 'Product Management',
+    'productManagement.description': 'Add, edit, or delete products from the Bloom Express catalog.',
     'productManagement.addNew': 'Add New Product',
     'productManagement.edit': 'Edit Product',
     'productManagement.updateDesc': 'Update the product information below.',
@@ -212,6 +213,7 @@ const translations = {
 
     // Product Management
     'productManagement.title': 'პროდუქტების მართვა',
+    'productManagement.description': 'დაამატეთ, შეცვალეთ ან წაშალეთ პროდუქტები ბლუმ ექსპრესის კატალოგიდან.',
     'productManagement.addNew': 'ახალი პროდუქტის დამატება',
     'productManagement.edit': 'პროდუქტის რედაქტირება',
     'productManagement.updateDesc': 'განაახლეთ პროდუქტის ინფორმაცია ქვემოთ.',
@@ -280,9 +282,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   // Translation function
   const t = (key: string): string => {
-    const currentTranslations = translations[language];
-    // Using type assertion to tell TypeScript that we're accessing a property of the translations object
-    return (currentTranslations as Record<string, string>)[key] || key;
+    return translations[language][key as keyof typeof translations[typeof language]] || key;
   };
 
   // Set language function
