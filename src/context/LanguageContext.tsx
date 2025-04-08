@@ -114,11 +114,30 @@ const translations = {
 
     // Admin panel
     'admin.title': 'Admin Panel',
+    'admin.description': 'Manage sales, view analytics, and control system settings',
     'admin.salesManagement': 'Sales Management',
     'admin.analytics': 'Analytics',
     'admin.salesHistory': 'Sales History',
     'admin.accessDenied': 'Access Denied',
     'admin.noPermission': 'You don\'t have permission to access the admin panel.',
+    'admin.overview': 'Overview',
+    'admin.recentSales': 'Recent Sales',
+    'admin.salesByCategory': 'Sales by Category',
+    'admin.totalRevenue': 'Total Revenue',
+    'admin.orderStatus': 'Order Status',
+    'admin.filter': 'Filter',
+    'admin.all': 'All',
+    'admin.today': 'Today',
+    'admin.thisWeek': 'This Week',
+    'admin.thisMonth': 'This Month',
+    'admin.dateRange': 'Date Range',
+    'admin.orderId': 'Order ID',
+    'admin.customer': 'Customer',
+    'admin.date': 'Date',
+    'admin.status': 'Status',
+    'admin.amount': 'Amount',
+    'admin.viewDetails': 'View Details',
+    'admin.systemSettings': 'System Settings'
   },
   ka: {
     // Common
@@ -221,11 +240,30 @@ const translations = {
 
     // Admin panel
     'admin.title': 'ადმინ პანელი',
+    'admin.description': 'მართეთ გაყიდვები, ნახეთ ანალიტიკა და აკონტროლეთ სისტემის პარამეტრები',
     'admin.salesManagement': 'გაყიდვების მართვა',
     'admin.analytics': 'ანალიტიკა',
     'admin.salesHistory': 'გაყიდვების ისტორია',
     'admin.accessDenied': 'წვდომა აკრძალულია',
     'admin.noPermission': 'თქვენ არ გაქვთ ადმინ პანელზე წვდომის უფლება.',
+    'admin.overview': 'მიმოხილვა',
+    'admin.recentSales': 'ბოლო გაყიდვები',
+    'admin.salesByCategory': 'გაყიდვები კატეგორიების მიხედვით',
+    'admin.totalRevenue': 'მთლიანი შემოსავალი',
+    'admin.orderStatus': 'შეკვეთის სტატუსი',
+    'admin.filter': 'ფილტრი',
+    'admin.all': 'ყველა',
+    'admin.today': 'დღეს',
+    'admin.thisWeek': 'ამ კვირაში',
+    'admin.thisMonth': 'ამ თვეში',
+    'admin.dateRange': 'თარიღის დიაპაზონი',
+    'admin.orderId': 'შეკვეთის ID',
+    'admin.customer': 'მომხმარებელი',
+    'admin.date': 'თარიღი',
+    'admin.status': 'სტატუსი',
+    'admin.amount': 'რაოდენობა',
+    'admin.viewDetails': 'დეტალების ნახვა',
+    'admin.systemSettings': 'სისტემის პარამეტრები'
   }
 };
 
