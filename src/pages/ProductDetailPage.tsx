@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductById } from '../data/products';
@@ -5,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import { toast } from '../components/ui/use-toast';
 import { Button } from '../components/ui/button';
 import { Heart, ShoppingCart, ChevronLeft, Store } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,14 +16,15 @@ const ProductDetailPage = () => {
   
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { t } = useLanguage();
   
   if (!product) {
     return (
       <div className="bloom-container py-12 text-center">
-        <h2 className="text-2xl font-bold mb-4">Product Not Found</h2>
-        <p className="mb-6">Sorry, we couldn't find the product you're looking for.</p>
+        <h2 className="text-2xl font-bold mb-4">{t('product.notFound')}</h2>
+        <p className="mb-6">{t('product.notFoundDesc')}</p>
         <Link to="/products" className="bloom-button">
-          Continue Shopping
+          {t('product.continueShopping')}
         </Link>
       </div>
     );
@@ -55,7 +58,7 @@ const ProductDetailPage = () => {
           className="flex items-center text-gray-600 mb-6 hover:text-bloom-pink transition-colors"
         >
           <ChevronLeft className="h-4 w-4 mr-1" />
-          Back to Products
+          {t('product.back')}
         </button>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -80,11 +83,11 @@ const ProductDetailPage = () => {
             </div>
             
             <div className="mb-6">
-              <p className="text-sm text-gray-500 mb-1">Category: {product.category}</p>
+              <p className="text-sm text-gray-500 mb-1">{t('product.category')}: {product.category}</p>
               
               {product.colors && (
                 <div className="flex items-center gap-1 mb-1">
-                  <span className="text-sm text-gray-500">Colors:</span>
+                  <span className="text-sm text-gray-500">{t('product.colors')}:</span>
                   {product.colors.map(color => (
                     <span key={color} className="text-sm text-gray-700">{color}</span>
                   ))}
@@ -93,7 +96,7 @@ const ProductDetailPage = () => {
               
               {product.occasion && (
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <span className="text-sm text-gray-500">Perfect for:</span>
+                  <span className="text-sm text-gray-500">{t('product.perfectFor')}:</span>
                   {product.occasion.map(occ => (
                     <span 
                       key={occ} 
@@ -108,7 +111,7 @@ const ProductDetailPage = () => {
             
             <div className="flex items-center gap-4 mb-6">
               <div>
-                <label htmlFor="quantity" className="block text-sm text-gray-500 mb-1">Quantity</label>
+                <label htmlFor="quantity" className="block text-sm text-gray-500 mb-1">{t('product.quantity')}</label>
                 <select 
                   id="quantity" 
                   className="border-gray-200 rounded-md w-20"
@@ -128,7 +131,7 @@ const ProductDetailPage = () => {
                 className="bloom-button flex-1"
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
-                Add to Cart
+                {t('product.addToCart')}
               </Button>
               
               <Button 
@@ -137,7 +140,7 @@ const ProductDetailPage = () => {
                 className="bloom-button-outline"
               >
                 <Store className="h-5 w-5 mr-2" />
-                Visit Store
+                {t('product.visitStore')}
               </Button>
               
               {/* <Button 

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart, Menu, X, MapPin, Flower } from 'lucide-react';
 import { useState, ReactNode } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
 
 interface HeaderProps {
   userMenu?: ReactNode;
@@ -11,6 +13,7 @@ interface HeaderProps {
 const Header = ({ userMenu }: HeaderProps) => {
   const { totalItems } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <header className="sticky top-0 bg-white border-b border-gray-100 shadow-sm z-40">
@@ -18,24 +21,27 @@ const Header = ({ userMenu }: HeaderProps) => {
         <div className="flex items-center justify-between py-4">
           <Link to="/" className="flex items-center">
             <Flower className="h-6 w-6 text-bloom-green mr-2 animate-spin-slow" />
-            <span className="text-2xl font-bold text-bloom-green">Bloom Express</span>
+            <span className="text-2xl font-bold text-bloom-green">{t('app.name')}</span>
           </Link>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-gray-700 hover:text-bloom-pink transition-colors hover:scale-105 transform duration-200">
-              Home
+              {t('nav.home')}
             </Link>
             <Link to="/products" className="text-gray-700 hover:text-bloom-pink transition-colors hover:scale-105 transform duration-200">
-              Shop
+              {t('nav.shop')}
             </Link>
             <Link to="/stores" className="flex items-center text-gray-700 hover:text-bloom-pink transition-colors hover:scale-105 transform duration-200">
               <MapPin className="h-4 w-4 mr-1" />
-              Stores
+              {t('nav.stores')}
             </Link>
           </nav>
           
           <div className="flex items-center space-x-4">
+            {/* Language Switcher */}
+            <LanguageSwitcher />
+            
             {/* User Menu */}
             {userMenu}
             
@@ -72,14 +78,14 @@ const Header = ({ userMenu }: HeaderProps) => {
                 className="text-gray-700 hover:text-bloom-pink transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link 
                 to="/products" 
                 className="text-gray-700 hover:text-bloom-pink transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Shop
+                {t('nav.shop')}
               </Link>
               <Link 
                 to="/stores" 
@@ -87,7 +93,7 @@ const Header = ({ userMenu }: HeaderProps) => {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <MapPin className="h-4 w-4 mr-1" />
-                Stores
+                {t('nav.stores')}
               </Link>
             </nav>
           </div>
