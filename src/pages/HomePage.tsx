@@ -1,12 +1,15 @@
+
 import { Link } from 'react-router-dom';
 import { getFeaturedProducts, getBestSellers } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import StoreCarousel from '../components/StoreCarousel';
 import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const HomePage = () => {
   const featuredProducts = getFeaturedProducts();
   const bestSellers = getBestSellers();
+  const { t } = useLanguage();
   
   return (
     <div>
@@ -16,17 +19,17 @@ const HomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div className="text-center md:text-left">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-                Fresh Blooms for Every Occasion
+                {t('home.hero.title')}
               </h1>
               <p className="text-lg text-gray-600 mb-6">
-                Discover beautiful bouquets and arrangements delivered with care.
+                {t('home.hero.description')}
               </p>
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                 <Link to="/products" className="bloom-button">
-                  Shop Now
+                  {t('home.hero.shopNow')}
                 </Link>
                 <Link to="/products?category=bouquets" className="bloom-button-outline">
-                  View Bouquets
+                  {t('home.hero.viewBouquets')}
                 </Link>
               </div>
             </div>
@@ -44,7 +47,7 @@ const HomePage = () => {
       {/* Categories Section */}
       <section className="py-16">
         <div className="bloom-container">
-          <h2 className="text-3xl font-bold text-center mb-12">Shop by Category</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">{t('home.categories.title')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Link to="/products?category=bouquets" className="relative group overflow-hidden rounded-lg">
@@ -57,9 +60,9 @@ const HomePage = () => {
               </div>
               <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">Bouquets</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('home.categories.bouquets')}</h3>
                   <span className="inline-block px-4 py-2 bg-white text-bloom-pink rounded-full">
-                    Shop Now
+                    {t('home.categories.shopNow')}
                   </span>
                 </div>
               </div>
@@ -75,9 +78,9 @@ const HomePage = () => {
               </div>
               <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">Single Stems</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('home.categories.singles')}</h3>
                   <span className="inline-block px-4 py-2 bg-white text-bloom-pink rounded-full">
-                    Shop Now
+                    {t('home.categories.shopNow')}
                   </span>
                 </div>
               </div>
@@ -93,9 +96,9 @@ const HomePage = () => {
               </div>
               <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                 <div className="text-center">
-                  <h3 className="text-2xl font-bold text-white mb-2">Arrangements</h3>
+                  <h3 className="text-2xl font-bold text-white mb-2">{t('home.categories.arrangements')}</h3>
                   <span className="inline-block px-4 py-2 bg-white text-bloom-pink rounded-full">
-                    Shop Now
+                    {t('home.categories.shopNow')}
                   </span>
                 </div>
               </div>
@@ -108,9 +111,9 @@ const HomePage = () => {
       <section className="py-16 bg-bloom-beige">
         <div className="bloom-container">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Featured Flowers</h2>
+            <h2 className="text-3xl font-bold">{t('home.featured.title')}</h2>
             <Link to="/products" className="flex items-center text-bloom-green hover:text-bloom-pink transition-colors">
-              View All <ArrowRight className="h-4 w-4 ml-1" />
+              {t('home.featured.viewAll')} <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
           
@@ -126,9 +129,9 @@ const HomePage = () => {
       <section className="py-16 bg-white">
         <div className="bloom-container">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Find Our Stores</h2>
+            <h2 className="text-3xl font-bold">{t('home.stores.title')}</h2>
             <Link to="/stores" className="flex items-center text-bloom-green hover:text-bloom-pink transition-colors">
-              View All Locations <ArrowRight className="h-4 w-4 ml-1" />
+              {t('home.stores.viewAll')} <ArrowRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
           
@@ -136,7 +139,7 @@ const HomePage = () => {
           
           <div className="text-center mt-8">
             <Link to="/stores" className="bloom-button-outline">
-              All Store Locations
+              {t('home.stores.allLocations')}
             </Link>
           </div>
         </div>
@@ -145,7 +148,7 @@ const HomePage = () => {
       {/* Best Sellers Section */}
       <section className="py-16">
         <div className="bloom-container">
-          <h2 className="text-3xl font-bold text-center mb-8">Best Sellers</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">{t('home.bestSellers.title')}</h2>
           
           <div className="product-grid">
             {bestSellers.map(product => (
@@ -158,7 +161,7 @@ const HomePage = () => {
       {/* Why Choose Us Section */}
       <section className="py-16 bg-white">
         <div className="bloom-container">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Bloom Express</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">{t('home.whyChoose.title')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
@@ -167,8 +170,8 @@ const HomePage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Fresh Flowers Daily</h3>
-              <p className="text-gray-600">Our blooms are sourced fresh each morning for maximum longevity and beauty.</p>
+              <h3 className="text-xl font-semibold mb-2">{t('home.whyChoose.fresh.title')}</h3>
+              <p className="text-gray-600">{t('home.whyChoose.fresh.description')}</p>
             </div>
             
             <div className="text-center">
@@ -177,8 +180,8 @@ const HomePage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Same Day Delivery</h3>
-              <p className="text-gray-600">Order by 2pm for same-day delivery within our local delivery zones.</p>
+              <h3 className="text-xl font-semibold mb-2">{t('home.whyChoose.delivery.title')}</h3>
+              <p className="text-gray-600">{t('home.whyChoose.delivery.description')}</p>
             </div>
             
             <div className="text-center">
@@ -187,8 +190,8 @@ const HomePage = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-semibold mb-2">7-Day Freshness</h3>
-              <p className="text-gray-600">Our flowers are guaranteed to stay fresh for at least 7 days or we'll replace them.</p>
+              <h3 className="text-xl font-semibold mb-2">{t('home.whyChoose.freshness.title')}</h3>
+              <p className="text-gray-600">{t('home.whyChoose.freshness.description')}</p>
             </div>
           </div>
         </div>
