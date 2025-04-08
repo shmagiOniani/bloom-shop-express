@@ -2,7 +2,7 @@
 import type { Database } from '@/integrations/supabase/types';
 
 // Define mock types for tables that don't exist yet in the database
-interface MockTables {
+export interface MockTables {
   stores: {
     Row: {
       id: number;
@@ -49,20 +49,18 @@ interface MockTables {
   };
 }
 
-// Merge the mock tables with any existing tables in the database
-type MergedTables = Database['public']['Tables'] & MockTables;
+// Export merged types
+export type Tables = Database['public']['Tables'] & MockTables;
 
-// Export the merged tables type
-export type Tables = MergedTables;
+// Export the Supabase enums
 export type Enums = Database['public']['Enums'];
 
 // Custom types that extend the merged types
-export type StoreWithProducts = Tables['stores']['Row'] & {
-  products: Tables['products']['Row'][];
+export type StoreWithProducts = MockTables['stores']['Row'] & {
+  products: MockTables['products']['Row'][];
 };
 
-export type ProfileWithStores = Tables['profiles']['Row'] & {
-  stores: Tables['stores']['Row'][];
+export type ProfileWithStores = MockTables['profiles']['Row'] & {
+  stores: MockTables['stores']['Row'][];
 };
 
-// Any other custom types can be added here
