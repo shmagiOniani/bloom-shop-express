@@ -282,7 +282,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
 
   // Translation function
   const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key;
+    const currentTranslations = translations[language];
+    // Using type assertion to tell TypeScript that we're accessing a property of the translations object
+    return (currentTranslations as Record<string, string>)[key] || key;
   };
 
   // Set language function
