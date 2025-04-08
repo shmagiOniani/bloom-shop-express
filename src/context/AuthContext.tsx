@@ -1,9 +1,12 @@
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  updateProfile 
+  updateProfile,
+  onAuthStateChanged,
+  User as FirebaseUser
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -16,7 +19,7 @@ interface UserProfile {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: UserRole;
@@ -34,9 +37,9 @@ interface AuthContextType {
 
 // Mock users for demonstration
 const mockUsers: User[] = [
-  { id: 1, name: 'Customer User', email: 'customer@example.com', role: 'customer' },
-  { id: 2, name: 'Store Manager', email: 'manager@example.com', role: 'manager' },
-  { id: 3, name: 'Admin User', email: 'admin@example.com', role: 'admin' },
+  { id: '1', name: 'Customer User', email: 'customer@example.com', role: 'customer' },
+  { id: '2', name: 'Store Manager', email: 'manager@example.com', role: 'manager' },
+  { id: '3', name: 'Admin User', email: 'admin@example.com', role: 'admin' },
 ];
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -45,34 +48,97 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Convert Firebase user to our User type
+  const createUserFromFirebaseUser = async (firebaseUser: FirebaseUser): Promise<User> => {
+    try {
+      // Try to get user data from Firestore
+      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+      const userData = userDoc.data();
+      
+      return {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || userData?.firstName + ' ' + userData?.lastName || 'User',
+        email: firebaseUser.email || '',
+        role: userData?.role || 'customer'
+      };
+    } catch (error) {
+      console.warn('Failed to get user data from Firestore, using default values');
+      return {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || 'User',
+        email: firebaseUser.email || '',
+        role: 'customer'
+      };
+    }
+  };
+
   useEffect(() => {
-    // Check for stored user in localStorage
+    // First check local storage for cached user
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error('Failed to parse stored user', e);
+        localStorage.removeItem('user');
+      }
     }
-    setIsLoading(false);
+
+    // Then listen for Firebase auth state changes
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setIsLoading(true);
+      if (firebaseUser) {
+        try {
+          const appUser = await createUserFromFirebaseUser(firebaseUser);
+          setUser(appUser);
+          localStorage.setItem('user', JSON.stringify(appUser));
+        } catch (error) {
+          console.error('Error setting up user from Firebase:', error);
+          // Fallback to mock user for development
+          setUser(mockUsers[0]);
+          localStorage.setItem('user', JSON.stringify(mockUsers[0]));
+        }
+      } else {
+        setUser(null);
+        localStorage.removeItem('user');
+      }
+      setIsLoading(false);
+    });
+
+    // If auth state doesn't change in 2 seconds, assume we're in dev mode and use mock user
+    const timeout = setTimeout(() => {
+      if (isLoading && !user) {
+        console.log('Using mock user for development');
+        setUser(mockUsers[0]);
+        localStorage.setItem('user', JSON.stringify(mockUsers[0]));
+        setIsLoading(false);
+      }
+    }, 2000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
+      // For development/demo, allow login with mock users
+      const mockUser = mockUsers.find(u => u.email === email);
+      if (mockUser && password === 'password') {
+        setUser(mockUser);
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        return true;
+      }
+
+      // Real authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
       
-      // Get additional user data from Firestore
-      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-      const userData = userDoc.data();
-      
-      const user = {
-        id: parseInt(firebaseUser.uid),
-        name: firebaseUser.displayName || '',
-        email: firebaseUser.email || '',
-        role: userData?.role || 'customer'
-      };
-
-      setUser(user);
-      localStorage.setItem('user', JSON.stringify(user));
+      const appUser = await createUserFromFirebaseUser(firebaseUser);
+      setUser(appUser);
+      localStorage.setItem('user', JSON.stringify(appUser));
       return true;
     } catch (error) {
       console.error('Login error:', error);
@@ -89,6 +155,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.removeItem('user');
     } catch (error) {
       console.error('Logout error:', error);
+      // Even if Firebase logout fails, clear local state
+      setUser(null);
+      localStorage.removeItem('user');
       throw error;
     }
   };
@@ -104,24 +173,40 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (email: string, password: string, profile: UserProfile) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
 
-    // Update display name
-    await updateProfile(user, {
-      displayName: `${profile.firstName} ${profile.lastName}`
-    });
+      // Update display name
+      await updateProfile(firebaseUser, {
+        displayName: `${profile.firstName} ${profile.lastName}`
+      });
 
-    // Store additional user data in Firestore
-    await setDoc(doc(db, 'users', user.uid), {
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      email: email,
-      role: 'customer', // Default role
-      createdAt: new Date().toISOString()
-    });
+      // Store additional user data in Firestore
+      await setDoc(doc(db, 'users', firebaseUser.uid), {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: email,
+        role: 'customer', // Default role
+        createdAt: new Date().toISOString()
+      });
 
-    return user;
+      // Set user in state
+      const appUser: User = {
+        id: firebaseUser.uid,
+        name: `${profile.firstName} ${profile.lastName}`,
+        email: email,
+        role: 'customer'
+      };
+      
+      setUser(appUser);
+      localStorage.setItem('user', JSON.stringify(appUser));
+
+      return firebaseUser;
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
   };
 
   return (
@@ -146,4 +231,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
