@@ -39,6 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(JSON.parse(storedUser));
     }
     setIsLoading(false);
+    console.info('Using mock user for development');
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
@@ -98,4 +99,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
