@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -6,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { Flower, Eye, EyeOff } from 'lucide-react';
+import { Flower, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -29,6 +30,16 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Form validation
+    if (!formData.email || !formData.password || !formData.firstName || !formData.lastName) {
+      toast({
+        title: "Error",
+        description: "All fields are required",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -38,20 +49,28 @@ const RegisterPage = () => {
       return;
     }
     
+    if (formData.password.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
     
     try {
-      await register(formData.email, formData.password, {
+      const success = await register(formData.email, formData.password, {
         firstName: formData.firstName,
         lastName: formData.lastName
       });
       
-      toast({
-        title: "Success!",
-        description: "Account created successfully. Please log in.",
-      });
-      navigate('/login');
+      if (success) {
+        navigate('/login');
+      }
     } catch (error) {
+      console.error('Registration error:', error);
       toast({
         title: "Registration failed",
         description: error instanceof Error ? error.message : "Failed to create account",
@@ -159,7 +178,14 @@ const RegisterPage = () => {
               className="w-full bg-bloom-green hover:bg-bloom-green/90"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Creating Account..." : "Create Account"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </Button>
           </form>
         </CardContent>
@@ -176,4 +202,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage; 
+export default RegisterPage;

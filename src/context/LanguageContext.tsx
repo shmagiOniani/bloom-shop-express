@@ -1,297 +1,243 @@
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-
-type Language = 'en' | 'ka';
-
-interface LanguageContextType {
-  language: Language;
-  setLanguage: (language: Language) => void;
-  t: (key: string) => string;
+interface LanguageContextProps {
+  language: string;
+  setLanguage: (lang: string) => void;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-// Translation dictionaries
-const translations = {
-  en: {
-    // Common
-    'app.name': 'Bloom Express',
-    'language.english': 'English',
-    'language.georgian': 'Georgian',
-    
-    // Navigation
-    'nav.home': 'Home',
-    'nav.shop': 'Shop',
-    'nav.stores': 'Stores',
-    'nav.cart': 'Cart',
-    
-    // Home page
-    'home.hero.title': 'Fresh Blooms for Every Occasion',
-    'home.hero.description': 'Discover beautiful bouquets and arrangements delivered with care.',
-    'home.hero.shopNow': 'Shop Now',
-    'home.hero.viewBouquets': 'View Bouquets',
-    'home.categories.title': 'Shop by Category',
-    'home.categories.bouquets': 'Bouquets',
-    'home.categories.singles': 'Single Stems',
-    'home.categories.arrangements': 'Arrangements',
-    'home.categories.shopNow': 'Shop Now',
-    'home.featured.title': 'Featured Flowers',
-    'home.featured.viewAll': 'View All',
-    'home.stores.title': 'Find Our Stores',
-    'home.stores.viewAll': 'View All Locations',
-    'home.stores.allLocations': 'All Store Locations',
-    'home.bestSellers.title': 'Best Sellers',
-    'home.whyChoose.title': 'Why Choose Bloom Express',
-    'home.whyChoose.fresh.title': 'Fresh Flowers Daily',
-    'home.whyChoose.fresh.description': 'Our blooms are sourced fresh each morning for maximum longevity and beauty.',
-    'home.whyChoose.delivery.title': 'Same Day Delivery',
-    'home.whyChoose.delivery.description': 'Order by 2pm for same-day delivery within our local delivery zones.',
-    'home.whyChoose.freshness.title': '7-Day Freshness',
-    'home.whyChoose.freshness.description': 'Our flowers are guaranteed to stay fresh for at least 7 days or we\'ll replace them.',
-    
-    // Footer
-    'footer.description': 'Delivering fresh blooms daily for all your special moments.',
-    'footer.shop': 'Shop',
-    'footer.allFlowers': 'All Flowers',
-    'footer.bouquets': 'Bouquets',
-    'footer.singles': 'Single Stems',
-    'footer.arrangements': 'Arrangements',
-    'footer.help': 'Help',
-    'footer.needAssistance': 'Need assistance with your order?',
-    'footer.email': 'Email: support@bloomexpress.com',
-    'footer.phone': 'Phone: (555) 123-4567',
-    'footer.rights': 'All rights reserved.',
-    
-    // User Menu
-    'user.login': 'Login',
-    'user.account': 'My Account',
-    'user.profile': 'Profile',
-    'user.settings': 'Settings',
-    'user.management': 'Management',
-    'user.storeManagement': 'Store Management',
-    'user.productManagement': 'Product Management',
-    'user.adminPanel': 'Admin Panel',
-    'user.logout': 'Log out',
-    
-    // Product detail
-    'product.back': 'Back to Products',
-    'product.quantity': 'Quantity',
-    'product.addToCart': 'Add to Cart',
-    'product.visitStore': 'Visit Store',
-    'product.category': 'Category',
-    'product.colors': 'Colors',
-    'product.perfectFor': 'Perfect for',
-    'product.notFound': 'Product Not Found',
-    'product.notFoundDesc': 'Sorry, we couldn\'t find the product you\'re looking for.',
-    'product.continueShopping': 'Continue Shopping',
-    
-    // Product Management
-    'productManagement.title': 'Product Management',
-    'productManagement.description': 'Add, edit, or delete products from the Bloom Express catalog.',
-    'productManagement.addNew': 'Add New Product',
-    'productManagement.edit': 'Edit Product',
-    'productManagement.updateDesc': 'Update the product information below.',
-    'productManagement.addDesc': 'Fill in the details to add a new product to the catalog.',
-    'productManagement.productName': 'Product Name',
-    'productManagement.category': 'Category',
-    'productManagement.price': 'Price ($)',
-    'productManagement.imageUrl': 'Image URL',
-    'productManagement.description': 'Description',
-    'productManagement.cancel': 'Cancel',
-    'productManagement.update': 'Update Product',
-    'productManagement.add': 'Add Product',
-    'productManagement.catalog': 'Product Catalog',
-    'productManagement.catalogDesc': 'Current products in the Bloom Express catalog',
-    'productManagement.image': 'Image',
-    'productManagement.name': 'Name',
-    'productManagement.actions': 'Actions',
-    'productManagement.noProducts': 'No products available.',
-    'productManagement.addFirst': 'Add Your First Product',
-    'productManagement.accessDenied': 'Access Denied',
-    'productManagement.noPermission': 'You don\'t have permission to manage products.',
-    'productManagement.contactAdmin': 'Please contact an administrator if you believe this is an error.',
-    'productManagement.returnHome': 'Return to Home',
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
 
-    // Admin panel
-    'admin.title': 'Admin Panel',
-    'admin.description': 'Manage sales, view analytics, and control system settings',
-    'admin.salesManagement': 'Sales Management',
-    'admin.analytics': 'Analytics',
-    'admin.salesHistory': 'Sales History',
-    'admin.accessDenied': 'Access Denied',
-    'admin.noPermission': 'You don\'t have permission to access the admin panel.',
-    'admin.overview': 'Overview',
-    'admin.recentSales': 'Recent Sales',
-    'admin.salesByCategory': 'Sales by Category',
-    'admin.totalRevenue': 'Total Revenue',
-    'admin.orderStatus': 'Order Status',
-    'admin.filter': 'Filter',
-    'admin.all': 'All',
-    'admin.today': 'Today',
-    'admin.thisWeek': 'This Week',
-    'admin.thisMonth': 'This Month',
-    'admin.dateRange': 'Date Range',
-    'admin.orderId': 'Order ID',
-    'admin.customer': 'Customer',
-    'admin.date': 'Date',
-    'admin.status': 'Status',
-    'admin.amount': 'Amount',
-    'admin.viewDetails': 'View Details',
-    'admin.systemSettings': 'System Settings'
-  },
-  ka: {
-    // Common
-    'app.name': 'ბლუმ ექსპრესი',
-    'language.english': 'ინგლისური',
-    'language.georgian': 'ქართული',
-    
-    // Navigation
-    'nav.home': 'მთავარი',
-    'nav.shop': 'მაღაზია',
-    'nav.stores': 'მაღაზიები',
-    'nav.cart': 'კალათა',
-    
-    // Home page
-    'home.hero.title': 'ახალი ყვავილები ნებისმიერი შემთხვევისთვის',
-    'home.hero.description': 'აღმოაჩინეთ ლამაზი თაიგულები და კომპოზიციები, რომლებიც მიეწოდება ზრუნვით.',
-    'home.hero.shopNow': 'ახლავე შეძენა',
-    'home.hero.viewBouquets': 'თაიგულების ნახვა',
-    'home.categories.title': 'კატეგორიით შოპინგი',
-    'home.categories.bouquets': 'თაიგულები',
-    'home.categories.singles': 'ცალკეული ღერები',
-    'home.categories.arrangements': 'კომპოზიციები',
-    'home.categories.shopNow': 'ახლავე შეძენა',
-    'home.featured.title': 'გამორჩეული ყვავილები',
-    'home.featured.viewAll': 'ყველას ნახვა',
-    'home.stores.title': 'იპოვნეთ ჩვენი მაღაზიები',
-    'home.stores.viewAll': 'ყველა ლოკაციის ნახვა',
-    'home.stores.allLocations': 'ყველა მაღაზიის ლოკაცია',
-    'home.bestSellers.title': 'ბესტსელერები',
-    'home.whyChoose.title': 'რატომ აირჩიოთ ბლუმ ექსპრესი',
-    'home.whyChoose.fresh.title': 'ახალი ყვავილები ყოველდღე',
-    'home.whyChoose.fresh.description': 'ჩვენი ყვავილები მოგვაქვს ახალი ყოველ დილით მაქსიმალური სიცოცხლისუნარიანობისა და სილამაზისთვის.',
-    'home.whyChoose.delivery.title': 'იმავე დღეს მიწოდება',
-    'home.whyChoose.delivery.description': 'შეუკვეთეთ 14:00-მდე იმავე დღეს მიწოდებით ჩვენი ადგილობრივი მიწოდების ზონებში.',
-    'home.whyChoose.freshness.title': '7-დღიანი სიახლე',
-    'home.whyChoose.freshness.description': 'ჩვენი ყვავილები გარანტირებულია, რომ დარჩება ახალი სულ მცირე 7 დღის განმავლობაში ან ჩვენ შევცვლით მათ.',
-    
-    // Footer
-    'footer.description': 'ახალი ყვავილების მიწოდება ყოველდღე თქვენი ყველა განსაკუთრებული მომენტისთვის.',
-    'footer.shop': 'მაღაზია',
-    'footer.allFlowers': 'ყველა ყვავილი',
-    'footer.bouquets': 'თაიგულები',
-    'footer.singles': 'ცალკეული ღერები',
-    'footer.arrangements': 'კომპოზიციები',
-    'footer.help': 'დახმარება',
-    'footer.needAssistance': 'გჭირდებათ დახმარება თქვენი შეკვეთით?',
-    'footer.email': 'ელფოსტა: support@bloomexpress.com',
-    'footer.phone': 'ტელეფონი: (555) 123-4567',
-    'footer.rights': 'ყველა უფლება დაცულია.',
-    
-    // User Menu
-    'user.login': 'შესვლა',
-    'user.account': 'ჩემი ანგარიში',
-    'user.profile': 'პროფილი',
-    'user.settings': 'პარამეტრები',
-    'user.management': 'მართვა',
-    'user.storeManagement': 'მაღაზიების მართვა',
-    'user.productManagement': 'პროდუქტების მართვა',
-    'user.adminPanel': 'ადმინ პანელი',
-    'user.logout': 'გასვლა',
-    
-    // Product detail
-    'product.back': 'პროდუქტებზე დაბრუნება',
-    'product.quantity': 'რაოდენობა',
-    'product.addToCart': 'კალათაში დამატება',
-    'product.visitStore': 'მაღაზიის მონახულება',
-    'product.category': 'კატეგორია',
-    'product.colors': 'ფერები',
-    'product.perfectFor': 'იდეალურია',
-    'product.notFound': 'პროდუქტი ვერ მოიძებნა',
-    'product.notFoundDesc': 'სამწუხაროდ, ვერ ვიპოვეთ თქვენს მიერ მოძებნილი პროდუქტი.',
-    'product.continueShopping': 'შოპინგის გაგრძელება',
-
-    // Product Management
-    'productManagement.title': 'პროდუქტების მართვა',
-    'productManagement.description': 'დაამატეთ, შეცვალეთ ან წაშალეთ პროდუქტები ბლუმ ექსპრესის კატალოგიდან.',
-    'productManagement.addNew': 'ახალი პროდუქტის დამატება',
-    'productManagement.edit': 'პროდუქტის რედაქტირება',
-    'productManagement.updateDesc': 'განაახლეთ პროდუქტის ინფორმაცია ქვემოთ.',
-    'productManagement.addDesc': 'შეავსეთ დეტალები კატალოგში ახალი პროდუქტის დასამატებლად.',
-    'productManagement.productName': 'პროდუქტის სახელი',
-    'productManagement.category': 'კატეგორია',
-    'productManagement.price': 'ფასი ($)',
-    'productManagement.imageUrl': 'სურათის URL',
-    'productManagement.description': 'აღწერა',
-    'productManagement.cancel': 'გაუქმება',
-    'productManagement.update': 'პროდუქტის განახლება',
-    'productManagement.add': 'პროდუქტის დამატება',
-    'productManagement.catalog': 'პროდუქტების კატალოგი',
-    'productManagement.catalogDesc': 'მიმდინარე პროდუქტები ბლუმ ექსპრესის კატალოგში',
-    'productManagement.image': 'სურათი',
-    'productManagement.name': 'სახელი',
-    'productManagement.actions': 'ქმედებები',
-    'productManagement.noProducts': 'პროდუქტები არ არის ხელმისაწვდომი.',
-    'productManagement.addFirst': 'დაამატეთ თქვენი პირველი პროდუქტი',
-    'productManagement.accessDenied': 'წვდომა აკრძალულია',
-    'productManagement.noPermission': 'თქვენ არ გაქვთ პროდუქტების მართვის უფლება.',
-    'productManagement.contactAdmin': 'გთხოვთ დაუკავშირდეთ ადმინისტრატორს, თუ ფიქრობთ, რომ ეს შეცდომაა.',
-    'productManagement.returnHome': 'მთავარ გვერდზე დაბრუნება',
-
-    // Admin panel
-    'admin.title': 'ადმინ პანელი',
-    'admin.description': 'მართეთ გაყიდვები, ნახეთ ანალიტიკა და აკონტროლეთ სისტემის პარამეტრები',
-    'admin.salesManagement': 'გაყიდვების მართვა',
-    'admin.analytics': 'ანალიტიკა',
-    'admin.salesHistory': 'გაყიდვების ისტორია',
-    'admin.accessDenied': 'წვდომა აკრძალულია',
-    'admin.noPermission': 'თქვენ არ გაქვთ ადმინ პანელზე წვდომის უფლება.',
-    'admin.overview': 'მიმოხილვა',
-    'admin.recentSales': 'ბოლო გაყიდვები',
-    'admin.salesByCategory': 'გაყიდვები კატეგორიების მიხედვით',
-    'admin.totalRevenue': 'მთლიანი შემოსავალი',
-    'admin.orderStatus': 'შეკვეთის სტატუსი',
-    'admin.filter': 'ფილტრი',
-    'admin.all': 'ყველა',
-    'admin.today': 'დღეს',
-    'admin.thisWeek': 'ამ კვირაში',
-    'admin.thisMonth': 'ამ თვეში',
-    'admin.dateRange': 'თარიღის დიაპაზონი',
-    'admin.orderId': 'შეკვეთის ID',
-    'admin.customer': 'მომხმარებელი',
-    'admin.date': 'თარიღი',
-    'admin.status': 'სტატუსი',
-    'admin.amount': 'რაოდენობა',
-    'admin.viewDetails': 'დეტალების ნახვა',
-    'admin.systemSettings': 'სისტემის პარამეტრები'
-  }
-};
-
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>(() => {
-    // Try to get the language from localStorage, default to 'en'
-    const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage === 'en' || savedLanguage === 'ka') ? savedLanguage : 'en';
-  });
-
-  // Update localStorage when language changes
-  useEffect(() => {
+  React.useEffect(() => {
     localStorage.setItem('language', language);
-    document.documentElement.lang = language;
   }, [language]);
 
-  // Translation function
-  const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations[typeof language]] || key;
+  const translations = {
+    en: {
+      "home.welcome": "Welcome!",
+      "home.description": "Explore our wide range of products and find the perfect items for you.",
+      "products.title": "Products",
+      "products.description": "Check out our amazing products!",
+      "product.addToCart": "Add to Cart",
+      "product.viewDetails": "View Details",
+      "cart.title": "Shopping Cart",
+      "cart.empty": "Your cart is currently empty.",
+      "cart.update": "Update",
+      "cart.remove": "Remove",
+      "cart.checkout": "Checkout",
+      "cart.total": "Total:",
+      "checkout.title": "Checkout",
+      "checkout.name": "Name",
+      "checkout.address": "Address",
+      "checkout.city": "City",
+      "checkout.state": "State",
+      "checkout.zip": "ZIP Code",
+      "checkout.phone": "Phone",
+      "checkout.email": "Email",
+      "checkout.placeOrder": "Place Order",
+      "thankYou.title": "Thank You!",
+      "thankYou.message": "Your order has been placed successfully.",
+      "stores.title": "Our Stores",
+      "stores.description": "Visit one of our stores to experience our products in person.",
+      "store.hours": "Hours:",
+      "store.specialty": "Specialty:",
+      "storeManagement.title": "Store Management",
+      "storeManagement.addStore": "Add Store",
+      "storeManagement.editStore": "Edit Store",
+      "storeManagement.deleteStore": "Delete Store",
+      "storeManagement.name": "Store Name",
+      "storeManagement.address": "Address",
+      "storeManagement.city": "City",
+      "storeManagement.state": "State",
+      "storeManagement.zipCode": "ZIP Code",
+      "storeManagement.phone": "Phone",
+      "storeManagement.hours": "Hours",
+      "storeManagement.specialty": "Specialty",
+      "productManagement.title": "Product Management",
+      "productManagement.addProduct": "Add Product",
+      "productManagement.editProduct": "Edit Product",
+      "productManagement.deleteProduct": "Delete Product",
+      "productManagement.name": "Product Name",
+      "productManagement.description": "Description",
+      "productManagement.price": "Price",
+      "productManagement.imageUrl": "Image URL",
+      "productManagement.category": "Category",
+      "productManagement.store": "Store",
+      "profile.title": "Profile",
+      "profile.username": "Username",
+      "profile.fullName": "Full Name",
+      "profile.avatarUrl": "Avatar URL",
+      "settings.title": "Settings",
+      "settings.language": "Language",
+      "settings.theme": "Theme",
+      "login.title": "Login",
+      "login.email": "Email",
+      "login.password": "Password",
+      "login.signIn": "Sign In",
+      "login.noAccount": "Don't have an account?",
+      "login.signUp": "Sign up",
+      "register.title": "Register",
+      "register.firstName": "First Name",
+      "register.lastName": "Last Name",
+      "register.email": "Email",
+      "register.password": "Password",
+      "register.confirmPassword": "Confirm Password",
+      "register.createAccount": "Create Account",
+      "register.alreadyAccount": "Already have an account?",
+      "register.signIn": "Sign in",
+      "unauthorized.title": "Unauthorized",
+      "unauthorized.message": "You are not authorized to view this page.",
+      "notFound.title": "Page Not Found",
+      "notFound.message": "The page you are looking for does not exist.",
+      "user.login": "Login",
+      "user.logout": "Logout",
+      "user.profile": "Profile",
+      "user.settings": "Settings",
+      "user.account": "Account",
+      "user.storeManagement": "Store Management",
+      "user.productManagement": "Product Management",
+      "user.adminPanel": "Admin Panel",
+      "adminPanel.title": "Admin Panel",
+      "adminPanel.users": "Users",
+      "adminPanel.stores": "Stores",
+      "adminPanel.products": "Products",
+      "language.english": "English",
+      "language.spanish": "Spanish",
+      "cart.items": "{count} items",
+      "theme.light": "Light",
+      "theme.dark": "Dark",
+      "theme.system": "System",
+      "theme.title": "Theme",
+      "storeDetail.products": "Products in this store",
+      "storeDetail.contactUs": "Contact us",
+      "storeDetail.address": "Address",
+      "storeDetail.phone": "Phone",
+      "storeDetail.hours": "Opening Hours",
+      "storeDetail.specialty": "Specialty",
+      "storeDetail.noProducts": "No products in this store",
+    },
+    es: {
+      "home.welcome": "¡Bienvenido!",
+      "home.description": "Explora nuestra amplia gama de productos y encuentra los artículos perfectos para ti.",
+      "products.title": "Productos",
+      "products.description": "¡Echa un vistazo a nuestros increíbles productos!",
+      "product.addToCart": "Añadir al carrito",
+      "product.viewDetails": "Ver detalles",
+      "cart.title": "Carrito de compras",
+      "cart.empty": "Su carrito está actualmente vacío.",
+      "cart.update": "Actualizar",
+      "cart.remove": "Eliminar",
+      "cart.checkout": "Comprar",
+      "cart.total": "Total:",
+      "checkout.title": "Comprar",
+      "checkout.name": "Nombre",
+      "checkout.address": "Dirección",
+      "checkout.city": "Ciudad",
+      "checkout.state": "Estado",
+      "checkout.zip": "Código postal",
+      "checkout.phone": "Teléfono",
+      "checkout.email": "Correo electrónico",
+      "checkout.placeOrder": "Realizar pedido",
+      "thankYou.title": "¡Gracias!",
+      "thankYou.message": "Su pedido se ha realizado con éxito.",
+      "stores.title": "Nuestras tiendas",
+      "stores.description": "Visite una de nuestras tiendas para experimentar nuestros productos en persona.",
+      "store.hours": "Horas:",
+      "store.specialty": "Especialidad:",
+      "storeManagement.title": "Gestión de tiendas",
+      "storeManagement.addStore": "Agregar tienda",
+      "storeManagement.editStore": "Editar tienda",
+      "storeManagement.deleteStore": "Eliminar tienda",
+      "storeManagement.name": "Nombre de la tienda",
+      "storeManagement.address": "Dirección",
+      "storeManagement.city": "Ciudad",
+      "storeManagement.state": "Estado",
+      "storeManagement.zipCode": "Código postal",
+      "storeManagement.phone": "Teléfono",
+      "storeManagement.hours": "Horas",
+      "storeManagement.specialty": "Especialidad",
+      "productManagement.title": "Gestión de productos",
+      "productManagement.addProduct": "Añadir producto",
+      "productManagement.editProduct": "Editar producto",
+      "productManagement.deleteProduct": "Eliminar producto",
+      "productManagement.name": "Nombre del producto",
+      "productManagement.description": "Descripción",
+      "productManagement.price": "Precio",
+      "productManagement.imageUrl": "URL de la imagen",
+      "productManagement.category": "Categoría",
+      "productManagement.store": "Tienda",
+      "profile.title": "Perfil",
+      "profile.username": "Nombre de usuario",
+      "profile.fullName": "Nombre completo",
+      "profile.avatarUrl": "URL del avatar",
+      "settings.title": "Ajustes",
+      "settings.language": "Idioma",
+      "settings.theme": "Tema",
+      "login.title": "Acceso",
+      "login.email": "Correo electrónico",
+      "login.password": "Contraseña",
+      "login.signIn": "Acceder",
+      "login.noAccount": "¿No tienes una cuenta?",
+      "login.signUp": "Regístrate",
+      "register.title": "Registro",
+      "register.firstName": "Nombre",
+      "register.lastName": "Apellido",
+      "register.email": "Correo electrónico",
+      "register.password": "Contraseña",
+      "register.confirmPassword": "Confirmar contraseña",
+      "register.createAccount": "Crear cuenta",
+      "register.alreadyAccount": "¿Ya tienes una cuenta?",
+      "register.signIn": "Acceder",
+      "unauthorized.title": "No autorizado",
+      "unauthorized.message": "No está autorizado para ver esta página.",
+      "notFound.title": "Página no encontrada",
+      "notFound.message": "La página que está buscando no existe.",
+       "user.login": "Acceder",
+      "user.logout": "Cerrar sesión",
+      "user.profile": "Perfil",
+      "user.settings": "Ajustes",
+      "user.account": "Cuenta",
+      "user.storeManagement": "Gestión de tiendas",
+      "user.productManagement": "Gestión de productos",
+      "user.adminPanel": "Panel de administrador",
+      "adminPanel.title": "Panel de administrador",
+      "adminPanel.users": "Usuarios",
+      "adminPanel.stores": "Tiendas",
+      "adminPanel.products": "Productos",
+      "language.english": "Inglés",
+      "language.spanish": "Español",
+      "cart.items": "{count} artículos",
+      "theme.light": "Claro",
+      "theme.dark": "Oscuro",
+      "theme.system": "Sistema",
+      "theme.title": "Tema",
+      "storeDetail.products": "Productos en esta tienda",
+      "storeDetail.contactUs": "Contáctanos",
+      "storeDetail.address": "Dirección",
+      "storeDetail.phone": "Teléfono",
+      "storeDetail.hours": "Horario",
+      "storeDetail.specialty": "Especialidad",
+      "storeDetail.noProducts": "No hay productos en esta tienda",
+    },
   };
 
-  // Set language function
-  const setLanguage = (newLanguage: Language) => {
-    setLanguageState(newLanguage);
-  };
+  const t = useCallback((key: string, params: Record<string, string | number> = {}) => {
+    let translation = translations[language as keyof typeof translations][key] || key;
+    
+    Object.entries(params).forEach(([paramKey, paramValue]) => {
+      translation = translation.replace(`{${paramKey}}`, String(paramValue));
+    });
+
+    return translation;
+  }, [language]);
+
+  const value = { language, setLanguage, t };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );

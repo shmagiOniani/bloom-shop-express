@@ -9,7 +9,119 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: number
+          image_url: string | null
+          name: string | null
+          price: string | null
+          store_id: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name?: string | null
+          price?: string | null
+          store_id?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name?: string | null
+          price?: string | null
+          store_id?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: number
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: number
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: number
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      stores: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          hours: string | null
+          id: number
+          name: string | null
+          phone: string | null
+          specialty: string | null
+          state: string | null
+          updated_at: string | null
+          zipCode: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          hours?: string | null
+          id?: number
+          name?: string | null
+          phone?: string | null
+          specialty?: string | null
+          state?: string | null
+          updated_at?: string | null
+          zipCode?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          hours?: string | null
+          id?: number
+          name?: string | null
+          phone?: string | null
+          specialty?: string | null
+          state?: string | null
+          updated_at?: string | null
+          zipCode?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
