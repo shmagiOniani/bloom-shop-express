@@ -87,10 +87,10 @@ const App = () => (
                       </ProtectedRoute>
                     } 
                   />
-                  <Route path="/register" element={<RegisterPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                  <Route path="*" element={<NotFound />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
             </BrowserRouter>

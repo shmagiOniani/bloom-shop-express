@@ -1,54 +1,36 @@
+import { db } from '../firebase/config';
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { Store } from '../pages/StoresPage';
 
-import { supabase } from "@/integrations/supabase/client";
-import type { StoreWithProducts } from "@/types/customTypes";
-import { Store as MockStore } from "@/pages/StoresPage";
+export const storeService = {
+  async getStores(): Promise<Store[]> {
+    const querySnapshot = await getDocs(collection(db, 'stores'));
+    return querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: parseInt(doc.id),
+        name: data.name,
+        address: data.address,
+        city: data.city,
+        state: data.state,
+        zipCode: data.zipCode,
+        phone: data.phone,
+        hours: data.hours,
+        specialty: data.specialty
+      } as Store;
+    });
+  },
 
-// Function to get mock store data
-const getMockStoreData = async (): Promise<MockStore[]> => {
-  return await import("@/pages/StoresPage").then(module => module.storeData);
-};
+  async addStore(store: Omit<Store, 'id'>): Promise<string> {
+    const docRef = await addDoc(collection(db, 'stores'), store);
+    return docRef.id;
+  },
 
-// Temporary function that returns mock data until the database is set up
-export const getStores = async (): Promise<MockStore[]> => {
-  try {
-    console.log("Fetching stores using mock data");
-    // Return mock data
-    return await getMockStoreData();
-  } catch (error) {
-    console.error("Error in getStores function:", error);
-    // Fall back to mock data
-    return await getMockStoreData();
+  async updateStore(id: string, store: Partial<Store>): Promise<void> {
+    await updateDoc(doc(db, 'stores', id), store);
+  },
+
+  async deleteStore(id: string): Promise<void> {
+    await deleteDoc(doc(db, 'stores', id));
   }
-};
-
-// Temporary function that returns mock data until the database is set up
-export const getStoreWithProducts = async (storeId: number): Promise<StoreWithProducts | null> => {
-  try {
-    console.log(`Fetching store with ID ${storeId} using mock data`);
-    // Fall back to mock data
-    const mockStores = await getMockStoreData();
-    const mockStore = mockStores.find((store: MockStore) => store.id === storeId);
-    
-    if (!mockStore) return null;
-    
-    // Create a mock StoreWithProducts object
-    return {
-      ...mockStore,
-      products: [] // No mock products for now
-    } as unknown as StoreWithProducts;
-    
-  } catch (error) {
-    console.error("Error in getStoreWithProducts function:", error);
-    // Fall back to mock data
-    const mockStores = await getMockStoreData();
-    const mockStore = mockStores.find((store: MockStore) => store.id === storeId);
-    
-    if (!mockStore) return null;
-    
-    // Create a mock StoreWithProducts object
-    return {
-      ...mockStore,
-      products: [] // No mock products for now
-    } as unknown as StoreWithProducts;
-  }
-};
+}; 

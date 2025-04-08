@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -7,12 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { Flower, LogIn, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Flower, LogIn } from 'lucide-react';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
   const { toast } = useToast();
@@ -37,25 +35,17 @@ const LoginPage = () => {
     setIsSubmitting(true);
     
     try {
-      const success = await login(email, password);
-      
-      if (success) {
-        toast({
-          title: "Success!",
-          description: "You've successfully logged in",
-        });
-        navigate(from, { replace: true });
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid email or password",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
+      await login(email, password);
       toast({
-        title: "Error",
-        description: "An unexpected error occurred",
+        title: "Success!",
+        description: "You've successfully logged in",
+      });
+      navigate(from, { replace: true });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Invalid email or password";
+      toast({
+        title: "Login failed",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -100,64 +90,32 @@ const LoginPage = () => {
                     Forgot password?
                   </Link>
                 </div>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="border-gray-200 focus:border-bloom-green"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-500" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-gray-500" />
-                    )}
-                  </button>
-                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="border-gray-200 focus:border-bloom-green"
+                />
               </div>
               <Button 
                 type="submit" 
                 className="w-full bg-bloom-green hover:bg-bloom-green/90"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  <>
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Sign In
-                  </>
-                )}
+                <LogIn className="mr-2 h-4 w-4" />
+                {isSubmitting ? "Signing in..." : "Sign In"}
               </Button>
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter>
           <div className="text-center text-sm text-gray-600">
             Don't have an account?{" "}
             <Link to="/register" className="text-bloom-pink hover:underline">
               Sign up
             </Link>
-          </div>
-          
-          <div className="text-center text-sm text-gray-600">
-            <span>Demo accounts:</span>
-            <div className="mt-2 space-y-1">
-              <div><strong>Manager:</strong> manager@example.com</div>
-              <div><strong>Admin:</strong> admin@example.com</div>
-              <div><strong>Customer:</strong> customer@example.com</div>
-              <div className="mt-1 text-xs text-gray-500">(Use password: "password" for all)</div>
-            </div>
           </div>
         </CardFooter>
       </Card>
