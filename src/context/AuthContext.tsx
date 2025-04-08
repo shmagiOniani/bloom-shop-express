@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 export type UserRole = 'customer' | 'manager' | 'admin';
@@ -17,6 +16,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   hasRole: (role: UserRole | UserRole[]) => boolean;
+  register: (email: string, password: string, profile: { firstName: string; lastName: string }) => Promise<void>;
 }
 
 // Mock users for demonstration
@@ -78,11 +78,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return user.role === role;
   };
 
+  const register = async (email: string, password: string, profile: { firstName: string; lastName: string }) => {
+    // Implementation of register function
+  };
+
   return (
     <AuthContext.Provider value={{
       user,
       login,
       logout,
+      register,
       isAuthenticated: !!user,
       isLoading,
       hasRole
