@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -36,25 +35,17 @@ const LoginPage = () => {
     setIsSubmitting(true);
     
     try {
-      const success = await login(email, password);
-      
-      if (success) {
-        toast({
-          title: "Success!",
-          description: "You've successfully logged in",
-        });
-        navigate(from, { replace: true });
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid email or password",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
+      await login(email, password);
       toast({
-        title: "Error",
-        description: "An unexpected error occurred",
+        title: "Success!",
+        description: "You've successfully logged in",
+      });
+      navigate(from, { replace: true });
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Invalid email or password";
+      toast({
+        title: "Login failed",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -119,15 +110,12 @@ const LoginPage = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
+        <CardFooter>
           <div className="text-center text-sm text-gray-600">
-            <span>Demo accounts:</span>
-            <div className="mt-2 space-y-1">
-              <div><strong>Manager:</strong> manager@example.com</div>
-              <div><strong>Admin:</strong> admin@example.com</div>
-              <div><strong>Customer:</strong> customer@example.com</div>
-              <div className="mt-1 text-xs text-gray-500">(Use password: "password" for all)</div>
-            </div>
+            Don't have an account?{" "}
+            <Link to="/register" className="text-bloom-pink hover:underline">
+              Sign up
+            </Link>
           </div>
         </CardFooter>
       </Card>
