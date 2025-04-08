@@ -87,6 +87,7 @@ const translations = {
     
     // Product Management
     'productManagement.title': 'Product Management',
+    'productManagement.description': 'Add, edit, or delete products from the Bloom Express catalog.',
     'productManagement.addNew': 'Add New Product',
     'productManagement.edit': 'Edit Product',
     'productManagement.updateDesc': 'Update the product information below.',
@@ -212,6 +213,7 @@ const translations = {
 
     // Product Management
     'productManagement.title': 'პროდუქტების მართვა',
+    'productManagement.description': 'დაამატეთ, შეცვალეთ ან წაშალეთ პროდუქტები ბლუმ ექსპრესის კატალოგიდან.',
     'productManagement.addNew': 'ახალი პროდუქტის დამატება',
     'productManagement.edit': 'პროდუქტის რედაქტირება',
     'productManagement.updateDesc': 'განაახლეთ პროდუქტის ინფორმაცია ქვემოთ.',
