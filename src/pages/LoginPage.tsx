@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -120,6 +119,13 @@ const LoginPage = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
+          <div className="text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-bloom-pink hover:underline">
+              Sign up
+            </Link>
+          </div>
+          
           <div className="text-center text-sm text-gray-600">
             <span>Demo accounts:</span>
             <div className="mt-2 space-y-1">
