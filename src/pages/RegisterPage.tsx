@@ -6,7 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
-import { Eye, EyeOff, Flower, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, Flower, UserPlus, Mail } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { otpService } from '@/services/otp.service';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +28,12 @@ const RegisterPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
+  const [isSendingOTP, setIsSendingOTP] = useState(false);
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [otpVerified, setOtpVerified] = useState(false);
   const { register } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -59,6 +75,75 @@ const RegisterPage = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleSendOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!forgotPasswordEmail) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsSendingOTP(true);
+    
+    try {
+      await otpService.sendOTP({
+        email: forgotPasswordEmail,
+        type: 'password-reset'
+      });
+      
+      setOtpSent(true);
+      toast({
+        title: "OTP Sent",
+        description: "Please check your email for the verification code.",
+      });
+    } catch (error) {
+      toast({
+        title: "Failed to send OTP",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSendingOTP(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!otp) {
+      toast({
+        title: "Error",
+        description: "Please enter the verification code",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    try {
+      await otpService.verifyOTP({
+        email: forgotPasswordEmail,
+        otp
+      });
+      
+      setOtpVerified(true);
+      toast({
+        title: "Success",
+        description: "Email verified successfully",
+      });
+      setForgotPasswordOpen(false);
+    } catch (error) {
+      toast({
+        title: "Verification Failed",
+        description: error instanceof Error ? error.message : "Invalid verification code",
+        variant: "destructive"
+      });
     }
   };
 
@@ -164,13 +249,88 @@ const RegisterPage = () => {
             </Button>
           </form>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex flex-col space-y-2">
           <p className="text-center text-sm text-gray-600 w-full">
             Already have an account?{" "}
             <Link to="/login" className="text-bloom-pink hover:underline">
               Sign in
             </Link>
           </p>
+          
+          <Dialog open={forgotPasswordOpen} onOpenChange={setForgotPasswordOpen}>
+            <DialogTrigger asChild>
+              <Button variant="link" className="text-sm text-bloom-pink">
+                Forgot Password?
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Reset Password</DialogTitle>
+                <DialogDescription>
+                  {!otpSent 
+                    ? "Enter your email address and we'll send you a verification code."
+                    : "Enter the verification code sent to your email."
+                  }
+                </DialogDescription>
+              </DialogHeader>
+              {!otpSent ? (
+                <form onSubmit={handleSendOTP} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="resetEmail">Email</Label>
+                    <Input
+                      id="resetEmail"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={forgotPasswordEmail}
+                      onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      type="submit"
+                      className="bg-bloom-green hover:bg-bloom-green/90"
+                      disabled={isSendingOTP}
+                    >
+                      <Mail className="mr-2 h-4 w-4" />
+                      {isSendingOTP ? "Sending..." : "Send Verification Code"}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              ) : (
+                <form onSubmit={handleVerifyOTP} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="otp">Verification Code</Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      placeholder="Enter 6-digit code"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      maxLength={6}
+                      required
+                    />
+                  </div>
+                  <DialogFooter className="flex flex-col space-y-2">
+                    <Button
+                      type="submit"
+                      className="w-full bg-bloom-green hover:bg-bloom-green/90"
+                    >
+                      Verify Code
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="link"
+                      onClick={handleSendOTP}
+                      className="text-sm"
+                    >
+                      Resend Code
+                    </Button>
+                  </DialogFooter>
+                </form>
+              )}
+            </DialogContent>
+          </Dialog>
         </CardFooter>
       </Card>
     </div>

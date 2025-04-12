@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authService } from '../services/auth.service';
 
 export type UserRole = 'customer' | 'manager' | 'admin';
 
@@ -44,17 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!response.ok) {
-        return false;
-      }
-
-      const data = await response.json();
+      const data = await authService.login({ email, password });
       setUser(data.user);
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('token', data.token);
@@ -84,23 +75,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (email: string, password: string, profile: { firstName: string; lastName: string }) => {
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-          firstName: profile.firstName,
-          lastName: profile.lastName
-        })
+      const data = await authService.register({
+        email,
+        password,
+        firstName: profile.firstName,
+        lastName: profile.lastName
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message);
-      }
-
-      const data = await response.json();
       return data;
     } catch (error) {
       console.error('Registration error:', error);
