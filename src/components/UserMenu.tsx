@@ -43,7 +43,7 @@ const UserMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="border-bloom-pink bg-white text-bloom-pink hover:bg-bloom-light-pink/10 flex gap-2">
           <User className="h-4 w-4" />
-          {user?.name?.split(' ')[0] || t('user.account')}
+          {user?.firstName?.split(' ')[0] || t('user.account')}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

@@ -5,7 +5,8 @@ export type UserRole = 'customer' | 'manager' | 'admin';
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   role: UserRole;
 }
@@ -22,9 +23,9 @@ interface AuthContextType {
 
 // Mock users for demonstration
 const mockUsers: User[] = [
-  { id: 1, name: 'Customer User', email: 'customer@example.com', role: 'customer' },
-  { id: 2, name: 'Store Manager', email: 'manager@example.com', role: 'manager' },
-  { id: 3, name: 'Admin User', email: 'admin@example.com', role: 'admin' },
+  { id: 1, firstName: 'Customer', lastName: 'User', email: 'customer@example.com', role: 'customer' },
+  { id: 2, firstName: 'Store', lastName: 'Manager', email: 'manager@example.com', role: 'manager' },
+  { id: 3, firstName: 'Admin', lastName: 'User', email: 'admin@example.com', role: 'admin' },
 ];
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

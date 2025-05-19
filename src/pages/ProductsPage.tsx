@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { products } from '../data/products';
+// import { Product, products } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import { Input } from '@/components/ui/input';
 import { Flower, Search, SlidersHorizontal, X } from 'lucide-react';
@@ -32,29 +32,44 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from '@/components/ui/button';
-
+import { useLanguage } from '../context/LanguageContext';
+import { productService } from '@/services/products.service';
 const ProductsPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category');
   
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [activeCategory, setActiveCategory] = useState<string | null>(categoryParam);
   const [activeSort, setActiveSort] = useState<string>('featured');
   const [searchTerm, setSearchTerm] = useState('');
   const [open, setOpen] = useState(false);
   
   // Price filter state
-  const minAvailablePrice = Math.floor(Math.min(...products.map(p => p.price)));
-  const maxAvailablePrice = Math.ceil(Math.max(...products.map(p => p.price)));
+  const minAvailablePrice = 1;
+  const maxAvailablePrice = 100;
   const [priceRange, setPriceRange] = useState<[number, number]>([minAvailablePrice, maxAvailablePrice]);
   
   // City filter state
-  const availableCities = Array.from(new Set(products.map(p => p.city))).filter(Boolean) as string[];
+  const availableCities = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Miami', 'San Francisco', 'Seattle', 'Washington D.C.'];
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   
   // Mobile filters state
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const { t } = useLanguage();
+
+  const [products, setProducts] = useState<any[]>([]);
+
+  const fetchProducts = async () => {
+    const response = await productService.getAll();
+    setProducts(response);
+    setFilteredProducts(response);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   // Handle keyboard shortcut for search
   useEffect(() => {
@@ -189,9 +204,9 @@ const ProductsPage = () => {
             <CommandGroup heading="Products">
               {products.map(product => (
                 <CommandItem
-                  key={product.id}
+                  key={product._id}
                   onSelect={() => {
-                    navigate(`/products/${product.id}`);
+                    navigate(`/products/${product._id}`);
                     setOpen(false);
                   }}
                   className="flex items-center gap-2 cursor-pointer"
@@ -237,7 +252,7 @@ const ProductsPage = () => {
                     checked={activeCategory === null}
                     onCheckedChange={() => setActiveCategory(null)}
                   />
-                  <Label htmlFor="all-categories" className="text-sm cursor-pointer">All Categories</Label>
+                  <Label htmlFor="all-categories" className="text-sm cursor-pointer">{t('all-categories')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -245,7 +260,7 @@ const ProductsPage = () => {
                     checked={activeCategory === 'bouquets'}
                     onCheckedChange={(checked) => setActiveCategory(checked ? 'bouquets' : null)}
                   />
-                  <Label htmlFor="bouquets" className="text-sm cursor-pointer">Bouquets</Label>
+                  <Label htmlFor="bouquets" className="text-sm cursor-pointer">{t('bouquets')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -253,7 +268,7 @@ const ProductsPage = () => {
                     checked={activeCategory === 'singles'}
                     onCheckedChange={(checked) => setActiveCategory(checked ? 'singles' : null)}
                   />
-                  <Label htmlFor="singles" className="text-sm cursor-pointer">Single Stems</Label>
+                  <Label htmlFor="singles" className="text-sm cursor-pointer">{t('singles')}</Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -261,7 +276,7 @@ const ProductsPage = () => {
                     checked={activeCategory === 'arrangements'}
                     onCheckedChange={(checked) => setActiveCategory(checked ? 'arrangements' : null)}
                   />
-                  <Label htmlFor="arrangements" className="text-sm cursor-pointer">Arrangements</Label>
+                    <Label htmlFor="arrangements" className="text-sm cursor-pointer">{t('arrangements')}</Label>
                 </div>
               </div>
             </div>
@@ -301,7 +316,7 @@ const ProductsPage = () => {
                 <SheetContent side="left" className="w-full sm:max-w-sm">
                   <SheetHeader>
                     <SheetTitle className="flex justify-between items-center">
-                      <span>Filters</span>
+                      <span>{t('filters')}</span>
                       {hasActiveFilters && (
                         <Button 
                           variant="ghost" 
@@ -310,19 +325,19 @@ const ProductsPage = () => {
                           className="text-xs text-gray-500 flex items-center"
                         >
                           <X className="h-3 w-3 mr-1" />
-                          Clear all
+                          {t('clear-all')}
                         </Button>
                       )}
                     </SheetTitle>
                     <SheetDescription>
-                      Refine your product search
+                      {t('refine-your-product-search')}
                     </SheetDescription>
                   </SheetHeader>
                   <div className="mt-6 space-y-6">
                     {/* Category Filter */}
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
-                        <span>Categories</span>
+                        <span>{t('categories')}</span>
                       </CollapsibleTrigger>
                       <CollapsibleContent className="pt-4 space-y-2">
                         <div className="flex items-center space-x-2">
@@ -331,7 +346,7 @@ const ProductsPage = () => {
                             checked={activeCategory === null}
                             onCheckedChange={() => setActiveCategory(null)}
                           />
-                          <Label htmlFor="mobile-all-categories" className="text-sm cursor-pointer">All Categories</Label>
+                          <Label htmlFor="mobile-all-categories" className="text-sm cursor-pointer">{t('all-categories')}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Checkbox 
@@ -339,7 +354,7 @@ const ProductsPage = () => {
                             checked={activeCategory === 'bouquets'}
                             onCheckedChange={(checked) => setActiveCategory(checked ? 'bouquets' : null)}
                           />
-                          <Label htmlFor="mobile-bouquets" className="text-sm cursor-pointer">Bouquets</Label>
+                          <Label htmlFor="mobile-bouquets" className="text-sm cursor-pointer">{t('bouquets')}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Checkbox 
@@ -347,7 +362,7 @@ const ProductsPage = () => {
                             checked={activeCategory === 'singles'}
                             onCheckedChange={(checked) => setActiveCategory(checked ? 'singles' : null)}
                           />
-                          <Label htmlFor="mobile-singles" className="text-sm cursor-pointer">Single Stems</Label>
+                          <Label htmlFor="mobile-singles" className="text-sm cursor-pointer">{t('singles')}</Label>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Checkbox 
@@ -355,14 +370,14 @@ const ProductsPage = () => {
                             checked={activeCategory === 'arrangements'}
                             onCheckedChange={(checked) => setActiveCategory(checked ? 'arrangements' : null)}
                           />
-                          <Label htmlFor="mobile-arrangements" className="text-sm cursor-pointer">Arrangements</Label>
+                          <Label htmlFor="mobile-arrangements" className="text-sm cursor-pointer">{t('arrangements')}</Label>
                         </div>
                       </CollapsibleContent>
                     </Collapsible>
                     
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
-                        <span>Price</span>
+                        <span>{t('price')}</span>
                       </CollapsibleTrigger>
                       <CollapsibleContent className="pt-4">
                         <PriceRangeFilter 
@@ -375,7 +390,7 @@ const ProductsPage = () => {
                     
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="flex justify-between w-full text-left font-medium py-2 border-b">
-                        <span>Cities</span>
+                        <span>{t('cities')}</span>
                       </CollapsibleTrigger>
                       <CollapsibleContent className="pt-4">
                         <CityFilter 
@@ -391,7 +406,7 @@ const ProductsPage = () => {
                         className="w-full bloom-button" 
                         onClick={() => setIsFilterOpen(false)}
                       >
-                        Apply Filters
+                        {t('apply-filters')}
                       </Button>
                     </div>
                   </div>
@@ -399,17 +414,17 @@ const ProductsPage = () => {
               </Sheet>
               
               <div className="flex items-center">
-                <label htmlFor="mobile-sort" className="text-sm text-gray-600 mr-2">Sort:</label>
+                <label htmlFor="mobile-sort" className="text-sm text-gray-600 mr-2">{t('sort')}:</label>
                 <select 
                   id="mobile-sort" 
                   className="border-gray-200 rounded-md text-sm"
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
                 >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="name">Name</option>
+                    <option value="featured">{t('featured')}</option>
+                  <option value="price-low">{t('price-low')}</option>
+                  <option value="price-high">{t('price-high')}</option>
+                  <option value="name">{t('name')}</option>
                 </select>
               </div>
             </div>
@@ -429,24 +444,24 @@ const ProductsPage = () => {
                       onClick={clearFilters}
                       className="text-xs text-gray-500 flex items-center p-0 h-auto hover:bg-transparent"
                     >
-                      Clear filters
+                      {t('clear-filters')}
                     </Button>
                   </div>
                 )}
               </div>
               
               <div className="flex items-center">
-                <label htmlFor="desktop-sort" className="text-sm text-gray-600 mr-2">Sort by:</label>
+                <label htmlFor="desktop-sort" className="text-sm text-gray-600 mr-2">{t('sort-by')}:</label>
                 <select 
                   id="desktop-sort" 
                   className="border-gray-200 rounded-md text-sm"
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
                 >
-                  <option value="featured">Featured</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="name">Name</option>
+                  <option value="featured">{t('featured')}</option>
+                  <option value="price-low">{t('price-low')}</option>
+                  <option value="price-high">{t('price-high')}</option>
+                  <option value="name">{t('name')}</option>
                 </select>
               </div>
             </div>
@@ -456,7 +471,7 @@ const ProductsPage = () => {
               <div className="flex flex-wrap gap-2 mb-4">
                 {activeCategory && (
                   <div className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                    <span>Category: {activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}</span>
+                    <span>{t('category')}: {activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}</span>
                     <button onClick={() => setActiveCategory(null)} className="ml-1">
                       <X className="h-3 w-3" />
                     </button>
@@ -465,7 +480,7 @@ const ProductsPage = () => {
                 
                 {(priceRange[0] > minAvailablePrice || priceRange[1] < maxAvailablePrice) && (
                   <div className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                    <span>Price: ${priceRange[0]} - ${priceRange[1]}</span>
+                    <span>{t('price')}: ${priceRange[0]} - ${priceRange[1]}</span>
                     <button onClick={() => setPriceRange([minAvailablePrice, maxAvailablePrice])} className="ml-1">
                       <X className="h-3 w-3" />
                     </button>
@@ -474,7 +489,7 @@ const ProductsPage = () => {
                 
                 {selectedCities.map(city => (
                   <div key={city} className="bg-gray-100 text-gray-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
-                    <span>City: {city}</span>
+                    <span>{t('city')}: {city}</span>
                     <button onClick={() => handleCityChange(city, false)} className="ml-1">
                       <X className="h-3 w-3" />
                     </button>
@@ -487,19 +502,19 @@ const ProductsPage = () => {
             {filteredProducts.length > 0 ? (
               <div className="product-grid">
                 {filteredProducts.map(product => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product._id} product={product} />
                 ))}
               </div>
             ) : (
               <div className="text-center py-12">
-                <h3 className="text-xl font-medium">No products found</h3>
-                <p className="text-gray-500 mt-2">Try changing your filters or check back later.</p>
+                <h3 className="text-xl font-medium">{t('no-products-found')}</h3>
+                <p className="text-gray-500 mt-2">{t('try-changing-filters')}</p>
                 <Button 
                   variant="outline" 
                   className="mt-4" 
                   onClick={clearFilters}
                 >
-                  Clear all filters
+                  {t('clear-all-filters')}
                 </Button>
               </div>
             )}

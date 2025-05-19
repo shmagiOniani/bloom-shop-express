@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getProductById } from '../data/products';
 import { useCart } from '../context/CartContext';
@@ -7,11 +7,18 @@ import { toast } from '../components/ui/use-toast';
 import { Button } from '../components/ui/button';
 import { Heart, ShoppingCart, ChevronLeft, Store } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { productService } from '@/services/products.service';
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
-  const productId = parseInt(id || '0');
-  const product = getProductById(productId);
+  const [product, setProduct] = useState<any>(null);
+  const fetchProduct = async () => {
+    const response = await productService.getById(id);
+    setProduct(response);
+  };
+  useEffect(() => {
+    fetchProduct();
+  }, []);
   const navigate = useNavigate();
   
   const [quantity, setQuantity] = useState(1);

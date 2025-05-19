@@ -72,6 +72,14 @@ const App = () => (
                     } 
                   />
                   <Route 
+                    path="/product-management/:id"  
+                    element={
+                      <ProtectedRoute requiredRoles={['manager', 'admin']}>
+                        <ProductManagementPage />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
                     path="/product-management" 
                     element={
                       <ProtectedRoute requiredRoles={['manager', 'admin']}>

@@ -93,11 +93,11 @@ const RegisterPage = () => {
     setIsSendingOTP(true);
     
     try {
-      await otpService.sendOTP({
+      const response = await otpService.sendOTP({
         email: forgotPasswordEmail,
         type: 'password-reset'
       });
-      
+      setOtp(response.otp);
       setOtpSent(true);
       toast({
         title: "OTP Sent",

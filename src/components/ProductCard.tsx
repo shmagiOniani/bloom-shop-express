@@ -26,7 +26,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <Flower className={`absolute top-2 right-2 w-4 h-4 text-bloom-pink transition-transform duration-500 ${isHovering ? 'rotate-180' : ''}`} />
       </div>
       
-      <Link to={`/products/${product.id}`} className="block">
+      <Link to={`/products/${product._id}`} className="block">
         <div className="aspect-square overflow-hidden">
           <img 
             src={product.image} 
@@ -37,7 +37,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </Link>
       
       <div className="p-4">
-        <Link to={`/products/${product.id}`} className="block">
+        <Link to={`/products/${product._id}`} className="block">
           <h3 className="font-medium text-xl text-gray-800 hover:text-bloom-pink transition-colors font-amatic">
             {product.name}
           </h3>

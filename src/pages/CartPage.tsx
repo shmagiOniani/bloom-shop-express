@@ -39,7 +39,7 @@ const CartPage = () => {
                 <div className="flow-root">
                   <ul className="-my-6 divide-y divide-gray-200">
                     {cart.map((item) => (
-                      <li key={item.id} className="py-6 flex">
+                      <li key={item._id} className="py-6 flex">
                         <div className="flex-shrink-0 w-24 h-24 overflow-hidden rounded-md border border-gray-200">
                           <img
                             src={item.image}
@@ -52,7 +52,7 @@ const CartPage = () => {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <Link to={`/products/${item.id}`}>{item.name}</Link>
+                                <Link to={`/products/${item._id}`}>{item.name}</Link>
                               </h3>
                               <p className="ml-4">${(item.price * item.quantity).toFixed(2)}</p>
                             </div>
@@ -62,7 +62,7 @@ const CartPage = () => {
                           <div className="flex-1 flex items-end justify-between text-sm">
                             <div className="flex items-center border rounded">
                               <button
-                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                onClick={() => updateQuantity(item._id, item.quantity - 1)}
                                 className="p-2 hover:bg-gray-100 transition-colors"
                                 disabled={item.quantity <= 1}
                               >
@@ -70,7 +70,7 @@ const CartPage = () => {
                               </button>
                               <span className="px-4 py-2">{item.quantity}</span>
                               <button
-                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                onClick={() => updateQuantity(item._id, item.quantity + 1)}
                                 className="p-2 hover:bg-gray-100 transition-colors"
                               >
                                 <Plus className="h-4 w-4" />
@@ -80,7 +80,7 @@ const CartPage = () => {
                             <button
                               type="button"
                               className="font-medium text-red-600 hover:text-red-500"
-                              onClick={() => removeFromCart(item.id)}
+                              onClick={() => removeFromCart(item._id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>

@@ -17,7 +17,6 @@ const CheckoutPage = () => {
     address: '',
     city: '',
     state: '',
-    zipCode: '',
     country: 'United States',
     cardName: '',
     cardNumber: '',
@@ -43,7 +42,7 @@ const CheckoutPage = () => {
     // Validate form
     const requiredFields = [
       'firstName', 'lastName', 'email', 'address', 
-      'city', 'state', 'zipCode', 'cardName', 
+      'city', 'state',  'cardName', 
       'cardNumber', 'expDate', 'cvv'
     ];
     
@@ -166,17 +165,6 @@ const CheckoutPage = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
-                      <input
-                        type="text"
-                        id="zipCode"
-                        name="zipCode"
-                        className="w-full border-gray-300 rounded-md"
-                        value={formData.zipCode}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div>
                       <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">Country</label>
                       <select
                         id="country"
@@ -275,7 +263,7 @@ const CheckoutPage = () => {
               <div className="flow-root">
                 <ul className="-my-4 divide-y divide-gray-200">
                   {cart.map((item) => (
-                    <li key={item.id} className="py-4 flex">
+                    <li key={item._id} className="py-4 flex">
                       <div className="flex-shrink-0 w-16 h-16 overflow-hidden rounded-md border border-gray-200">
                         <img
                           src={item.image}

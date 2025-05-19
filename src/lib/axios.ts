@@ -3,9 +3,10 @@ import { handleApiError } from './error-handling';
 import { toast } from '@/components/ui/use-toast';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'http://localhost:3001/api',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
   }
 });
 

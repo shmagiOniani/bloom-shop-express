@@ -12,8 +12,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 const StoreDetailPage = () => {
   const { id } = useParams();
-  const storeId = parseInt(id || "1");
-  const store = storeData.find((s) => s.id === storeId);
+  const storeId = id || "1";
+  const store = storeData.find((s) => s._id === storeId);
   
   const [mapLoaded, setMapLoaded] = useState(false);
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -21,8 +21,8 @@ const StoreDetailPage = () => {
   const featuredProducts = getFeaturedProducts().slice(0, 3);
   
   // Using a proper lookup function to get coordinates as a tuple
-  const getStoreCoordinates = (id: number): [number, number] => {
-    const coordinates: Record<number, [number, number]> = {
+  const getStoreCoordinates = (id: string): [number, number] => {
+    const coordinates: Record<string, [number, number]> = {
       1: [-122.3321, 47.6062], // Seattle Downtown
       2: [-122.2006, 47.6101], // Bellevue
       3: [-122.3215, 47.7041], // Northgate
@@ -86,9 +86,7 @@ const StoreDetailPage = () => {
             {store.name}
             <div className="absolute w-full h-2 bg-bloom-light-pink -bottom-1 left-0 rounded-full transform -rotate-1"></div>
           </h1>
-          <p className="text-lg text-gray-600 mt-4">
-            {store.specialty}
-          </p>
+        
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -106,7 +104,7 @@ const StoreDetailPage = () => {
                   <MapPin className="h-4 w-4 mr-2 text-bloom-pink shrink-0 mt-1" />
                   <div>
                     <p>{store.address}</p>
-                    <p>{store.city}, {store.state} {store.zipCode}</p>
+                    <p>{store.city} </p>
                   </div>
                 </div>
                 
@@ -123,10 +121,6 @@ const StoreDetailPage = () => {
                   </div>
                 </div>
                 
-                <div className="pt-3 border-t border-dashed border-gray-200">
-                  <p className="font-medium text-sm text-gray-700">Specialty:</p>
-                  <p className="text-bloom-pink font-medium">{store.specialty}</p>
-                </div>
                 
                 <div className="pt-2">
                   <Button className="w-full bg-bloom-green hover:bg-bloom-green/90 text-white">
@@ -159,7 +153,7 @@ const StoreDetailPage = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
             {featuredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
           

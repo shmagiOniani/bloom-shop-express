@@ -10,8 +10,8 @@ interface CartItem extends Product {
 interface CartContextType {
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
@@ -51,7 +51,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const addToCart = (product: Product, quantity = 1) => {
     setCart(currentCart => {
       // Check if product already exists in cart
-      const existingItemIndex = currentCart.findIndex(item => item.id === product.id);
+      const existingItemIndex = currentCart.findIndex(item => item._id === product._id);
       
       if (existingItemIndex > -1) {
         // Update quantity of existing item
@@ -73,23 +73,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
   };
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: string) => {
     setCart(currentCart => {
-      const itemToRemove = currentCart.find(item => item.id === productId);
+      const itemToRemove = currentCart.find(item => item._id === productId);
       if (itemToRemove) {
         toast({
           title: 'Item removed',
           description: `${itemToRemove.name} removed from your cart`,
         });
       }
-      return currentCart.filter(item => item.id !== productId);
+      return currentCart.filter(item => item._id !== productId);
     });
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number) => {
     setCart(currentCart => 
       currentCart.map(item => 
-        item.id === productId 
+        item._id === productId 
           ? { ...item, quantity: Math.max(1, quantity) } 
           : item
       )

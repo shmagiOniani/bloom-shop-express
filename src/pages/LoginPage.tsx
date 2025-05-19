@@ -129,9 +129,9 @@ const LoginPage = () => {
           <div className="text-center text-sm text-gray-600">
             <span>Demo accounts:</span>
             <div className="mt-2 space-y-1">
-              <div><strong>Manager:</strong> manager@example.com</div>
-              <div><strong>Admin:</strong> admin@example.com</div>
-              <div><strong>Customer:</strong> customer@example.com</div>
+              <div><strong>Manager:</strong> manager@gmail.com | Aa123456#</div>
+              <div><strong>Admin:</strong> admin@gmail.com | Aa123456#</div>
+              <div><strong>Customer:</strong> customer@gmail.com | Aa123456#</div>
               <div className="mt-1 text-xs text-gray-500">(Use password: "password" for all)</div>
             </div>
           </div>

@@ -14,7 +14,7 @@ export interface OTPVerification {
 export const otpService = {
   sendOTP: async (data: OTPRequest) => {
     try {
-      const response = await api.post('/auth/otp/send', data);
+      const response = await api.post('/otp/send', data);
       return response.data;
     } catch (error) {
       const apiError = error as ApiError;
@@ -24,7 +24,7 @@ export const otpService = {
 
   verifyOTP: async (data: OTPVerification) => {
     try {
-      const response = await api.post('/auth/otp/verify', data);
+      const response = await api.post('/otp/verify', data);
       return response.data;
     } catch (error) {
       const apiError = error as ApiError;

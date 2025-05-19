@@ -16,14 +16,9 @@ const ProfilePage = () => {
   if (!user) {
     return <div>Loading profile...</div>;
   }
+  console.log(user);
 
-  // Get first letter of first and last name for avatar
-  const getInitials = (name: string) => {
-    return name.split(' ')
-      .map(part => part[0])
-      .join('')
-      .toUpperCase();
-  };
+
 
   return (
     <div className="bloom-container py-12">
@@ -36,11 +31,11 @@ const ProfilePage = () => {
               <div className="flex justify-center mb-4">
                 <Avatar className="h-24 w-24">
                   <AvatarFallback className="text-2xl bg-bloom-light-pink text-bloom-pink">
-                    {getInitials(user.name)}
+                    {user.firstName.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <CardTitle>{user.name}</CardTitle>
+              <CardTitle>{user.firstName} {user.lastName}</CardTitle>
               <CardDescription>{user.email}</CardDescription>
             </CardHeader>
             <CardContent>
@@ -72,7 +67,7 @@ const ProfilePage = () => {
               <div className="space-y-4">
                 <div>
                   <h3 className="text-sm font-medium text-gray-500">Full Name</h3>
-                  <p className="mt-1">{user.name}</p>
+                  <p className="mt-1">{user.firstName} {user.lastName}</p>
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-500">Email Address</h3>

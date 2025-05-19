@@ -14,85 +14,113 @@ import {
 } from "@/components/ui/command";
 
 export interface Store {
-  id: number;
+  _id: string;
   name: string;
   address: string;
   city: string;
-  state: string;
-  zipCode: string;
   phone: string;
-  hours: string;
-  specialty: string;
+  hours: Array<{
+    day: string;
+    open: string;
+    close: string;
+    breakStart: string;
+    breakEnd: string;
+    isWorkingDay: boolean;
+  }>;
 }
 
 export const storeData: Store[] = [
   {
-    id: 1,
+    _id: "1",
     name: "Bloom Express Downtown",
     address: "123 Main Street",
     city: "Seattle",
-    state: "WA",
-    zipCode: "98101",
     phone: "(206) 555-1234",
-    hours: "Mon-Sat: 9am-7pm, Sun: 10am-5pm",
-    specialty: "Fresh Bouquets"
+    hours: [
+      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
+    ]
   },
   {
-    id: 2,
+    _id: "2",
     name: "Bloom Express Eastside",
     address: "456 Park Avenue",
     city: "Bellevue",
-    state: "WA",
-    zipCode: "98004",
     phone: "(425) 555-5678",
-    hours: "Mon-Sat: 10am-8pm, Sun: 11am-6pm",
-    specialty: "Luxury Arrangements"
+    hours: [
+      { day: "Monday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Tuesday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Wednesday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Thursday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Friday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Saturday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Sunday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
+    ]
   },
   {
-    id: 3,
+    _id: "3",
     name: "Bloom Express Northgate",
     address: "789 Lake Street",
     city: "Seattle",
-    state: "WA",
-    zipCode: "98125",
     phone: "(206) 555-9012",
-    hours: "Mon-Sat: 9am-6pm, Sun: 10am-4pm",
-    specialty: "Wedding Flowers"
+    hours: [
+      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
+    ]
   },
   {
-    id: 4,
+    _id: "4",
     name: "Bloom Express Tacoma",
     address: "321 Bay Drive",
     city: "Tacoma",
-    state: "WA",
-    zipCode: "98402",
     phone: "(253) 555-3456",
-    hours: "Mon-Sat: 9am-7pm, Sun: 11am-5pm",
-    specialty: "Custom Arrangements"
+    hours: [
+      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
+    ]
   },
   {
-    id: 5,
+    _id: "5",
     name: "Bloom Express Capitol Hill",
     address: "555 Pine Street",
     city: "Seattle",
-    state: "WA",
-    zipCode: "98122",
     phone: "(206) 555-7890",
-    hours: "Mon-Sat: 8am-8pm, Sun: 9am-6pm",
-    specialty: "Single Stems & Bouquets"
+    hours: [
+      { day: "Monday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Tuesday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Wednesday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Thursday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Friday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Saturday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
+      { day: "Sunday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
+    ]
   }
 ];
 
 const StoresPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [hoveredStore, setHoveredStore] = useState<number | null>(null);
+  const [hoveredStore, setHoveredStore] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   const filteredStores = storeData.filter(store => 
     store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    store.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    store.specialty.toLowerCase().includes(searchTerm.toLowerCase())
+    store.city.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
   useEffect(() => {
@@ -148,9 +176,9 @@ const StoresPage = () => {
             <CommandGroup heading="Stores">
               {storeData.map(store => (
                 <CommandItem
-                  key={store.id}
+                  key={store._id}
                   onSelect={() => {
-                    navigate(`/stores/${store.id}`);
+                    navigate(`/stores/${store._id}`);
                     setOpen(false);
                   }}
                   className="flex items-center gap-2 cursor-pointer"
@@ -171,11 +199,11 @@ const StoresPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {filteredStores.map((store) => (
             <Card 
-              key={store.id} 
+              key={store._id} 
               className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
-                hoveredStore === store.id ? 'border-bloom-pink scale-105' : 'border-gray-100'
+                hoveredStore === store._id ? 'border-bloom-pink scale-105' : 'border-gray-100'
               }`}
-              onMouseEnter={() => setHoveredStore(store.id)}
+              onMouseEnter={() => setHoveredStore(store._id)}
               onMouseLeave={() => setHoveredStore(null)}
             >
               <div className="h-4 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
@@ -184,7 +212,7 @@ const StoresPage = () => {
                   <Flower className="h-5 w-5 mr-2 text-bloom-pink" />
                   {store.name}
                 </CardTitle>
-                <CardDescription>{store.specialty}</CardDescription>
+                <CardDescription>{store.city}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -192,7 +220,7 @@ const StoresPage = () => {
                     <MapPin className="h-4 w-4 mr-2 text-bloom-pink shrink-0 mt-1" />
                     <div>
                       <p>{store.address}</p>
-                      <p>{store.city}, {store.state} {store.zipCode}</p>
+                      <p>{store.city} </p>
                     </div>
                   </div>
                   <div className="flex items-center">
@@ -201,10 +229,10 @@ const StoresPage = () => {
                   </div>
                   <div>
                     <p className="font-medium text-sm text-gray-700">Hours:</p>
-                    <p className="text-sm">{store.hours}</p>
+                    <p className="text-sm">{store.hours.map(hour => `${hour.day}: ${hour.open} - ${hour.close}`).join(', ')}</p>
                   </div>
                   <div className="pt-2">
-                    <Link to={`/stores/${store.id}`}>
+                    <Link to={`/stores/${store._id}`}>
                       <Button 
                         className="w-full bg-bloom-green hover:bg-bloom-green/90 text-white"
                         variant="default"
