@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { toast, useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Card,
   CardContent,
@@ -20,38 +20,21 @@ import {
 } from "@/components/ui/collapsible";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronDown } from "lucide-react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { Store } from "lucide-react";
-import { storeService } from "@/services/store.ervice";
-import { Store as StoreType } from "@/pages/StoresPage";
-import { FormControl, FormMessage } from "@/components/ui/form";
-import { FormItem, FormLabel } from "@/components/ui/form";
-import { FormField } from "@/components/ui/form";
-import { Form, useForm, FormProvider } from "react-hook-form";
+
 
 const SettingsPage = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSecurityOpen, setIsSecurityOpen] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+ 
   // Form states
   const [name, setName] = useState(
     user?.firstName + " " + user?.lastName || ""
   );
   const [email, setEmail] = useState(user?.email || "");
 
-  const form = useForm<StoreType>({
-    defaultValues: {
-      name: "",
-      address: "",
-      city: "",
-      phone: "",
-      hours: "",
-    },
-  });
+
 
   const handleProfileUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,36 +59,7 @@ const SettingsPage = () => {
     });
   };
 
-  const handleSubmit = async (data: StoreType) => {
-      setIsSubmitting(true);
-
-    try {
-      await storeService.apply(data).then((res) => {
-        toast({
-          title: "Application Submitted",
-          description: "Your store application has been submitted for review.",
-        });
-      });
-
-    
-
-      setIsOpen(false);
-      form.reset();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit store application. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCancel = () => {
-    setIsOpen(false);
-    form.reset();
-  };
+ 
 
 
   if (!user) {
@@ -342,130 +296,6 @@ const SettingsPage = () => {
         </TabsContent>
       </Tabs>
 
-      {user?.role === "customer" && (
-        <div className="mt-6 p-4 border rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">Become a Store Owner</h2>
-          <p className="text-gray-600 mb-4">
-            Want to sell your products? Apply to become a store owner!
-          </p>
-
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-bloom-green hover:bg-bloom-green/90">
-                <Store className="mr-2 h-4 w-4" />
-                Apply for Store Account
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <FormProvider {...form}>
-                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Store Name</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Bloom Express Downtown"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    
-
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Street Address</FormLabel>
-                          <FormControl>
-                            <Input placeholder="123 Main Street" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="city"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>City</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Seattle" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                     
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Phone</FormLabel>
-                            <FormControl>
-                              <Input placeholder="(206) 555-1234" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <FormField
-                      control={form.control}
-                      name="hours"
-                      render={({ field }) => (
-                        <FormItem className="col-span-2">
-                          <FormLabel>Hours</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Mon-Sat: 9am-7pm, Sun: 10am-5pm"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="flex justify-end gap-3">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => handleCancel()}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="submit"
-                      className="bg-bloom-green hover:bg-bloom-green/90"
-                    >
-                      {isSubmitting ? "Submitting..." : "Submit"}
-                    </Button>
-                  </div>
-                </form>
-              </FormProvider>
-            </DialogContent>
-          </Dialog>
-        </div>
-      )}
     </div>
   );
 };

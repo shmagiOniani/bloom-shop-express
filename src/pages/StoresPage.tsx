@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Flower, MapPin, Phone, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
+import {
   CommandDialog,
   CommandInput,
   CommandList,
@@ -12,6 +18,7 @@ import {
   CommandGroup,
   CommandItem,
 } from "@/components/ui/command";
+import { storeService } from "@/services/store.ervice";
 
 export interface Store {
   _id: string;
@@ -37,14 +44,63 @@ export const storeData: Store[] = [
     city: "Seattle",
     phone: "(206) 555-1234",
     hours: [
-      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
-    ]
+      {
+        day: "Monday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Tuesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Wednesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Thursday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Friday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Saturday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Sunday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: false,
+      },
+    ],
   },
   {
     _id: "2",
@@ -53,14 +109,63 @@ export const storeData: Store[] = [
     city: "Bellevue",
     phone: "(425) 555-5678",
     hours: [
-      { day: "Monday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Tuesday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Wednesday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Thursday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Friday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Saturday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Sunday", open: "10:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
-    ]
+      {
+        day: "Monday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Tuesday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Wednesday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Thursday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Friday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Saturday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Sunday",
+        open: "10:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: false,
+      },
+    ],
   },
   {
     _id: "3",
@@ -69,14 +174,63 @@ export const storeData: Store[] = [
     city: "Seattle",
     phone: "(206) 555-9012",
     hours: [
-      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
-    ]
+      {
+        day: "Monday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Tuesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Wednesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Thursday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Friday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Saturday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Sunday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: false,
+      },
+    ],
   },
   {
     _id: "4",
@@ -85,14 +239,63 @@ export const storeData: Store[] = [
     city: "Tacoma",
     phone: "(253) 555-3456",
     hours: [
-      { day: "Monday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Tuesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Wednesday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Thursday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Friday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Saturday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Sunday", open: "09:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
-    ]
+      {
+        day: "Monday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Tuesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Wednesday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Thursday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Friday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Saturday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Sunday",
+        open: "09:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: false,
+      },
+    ],
   },
   {
     _id: "5",
@@ -101,15 +304,64 @@ export const storeData: Store[] = [
     city: "Seattle",
     phone: "(206) 555-7890",
     hours: [
-      { day: "Monday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Tuesday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Wednesday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Thursday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Friday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Saturday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: true },
-      { day: "Sunday", open: "08:00", close: "18:00", breakStart: "13:00", breakEnd: "14:00", isWorkingDay: false }
-    ]
-  }
+      {
+        day: "Monday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Tuesday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Wednesday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Thursday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Friday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Saturday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: true,
+      },
+      {
+        day: "Sunday",
+        open: "08:00",
+        close: "18:00",
+        breakStart: "13:00",
+        breakEnd: "14:00",
+        isWorkingDay: false,
+      },
+    ],
+  },
 ];
 
 const StoresPage = () => {
@@ -118,23 +370,34 @@ const StoresPage = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const filteredStores = storeData.filter(store => 
-    store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    store.city.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  
+  const [stores, setStores] = useState<Store[]>([]);
+  const [filteredStores, setFilteredStores] = useState<Store[]>([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    storeService
+      .getAllStores()
+      .then((data) => {
+        setStores(data);
+        setFilteredStores(data);
+      })
+      .finally(() => {
+        setDataLoaded(true);
+      });
+  }, []);
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
       }
     };
-    
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, []);
-  
+
   return (
     <div className="py-8 md:py-12">
       <div className="bloom-container">
@@ -144,13 +407,14 @@ const StoresPage = () => {
             <div className="absolute w-full h-2 bg-bloom-light-pink -bottom-1 left-0 rounded-full transform -rotate-1"></div>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
-            Visit one of our beautiful flower shops and experience the magic in person!
+            Visit one of our beautiful flower shops and experience the magic in
+            person!
           </p>
         </div>
-        
+
         <div className="max-w-xl mx-auto mb-8">
           <div className="relative">
-            <Input 
+            <Input
               type="text"
               placeholder="Search by location, store name, or specialty..."
               value={searchTerm}
@@ -158,7 +422,7 @@ const StoresPage = () => {
               className="pl-10 py-6 rounded-full border-bloom-pink border-2 focus:border-bloom-green shadow-sm"
             />
             <Flower className="absolute left-3 top-1/2 transform -translate-y-1/2 text-bloom-pink h-5 w-5" />
-            <button 
+            <button
               onClick={() => setOpen(true)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-bloom-pink transition-colors bg-white/80 rounded-full p-1"
             >
@@ -168,13 +432,13 @@ const StoresPage = () => {
             </button>
           </div>
         </div>
-        
+
         <CommandDialog open={open} onOpenChange={setOpen}>
           <CommandInput placeholder="Search for stores..." />
           <CommandList>
             <CommandEmpty>No stores found.</CommandEmpty>
             <CommandGroup heading="Stores">
-              {storeData.map(store => (
+              {storeData.map((store) => (
                 <CommandItem
                   key={store._id}
                   onSelect={() => {
@@ -195,62 +459,81 @@ const StoresPage = () => {
             </CommandGroup>
           </CommandList>
         </CommandDialog>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-          {filteredStores.map((store) => (
-            <Card 
-              key={store._id} 
-              className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
-                hoveredStore === store._id ? 'border-bloom-pink scale-105' : 'border-gray-100'
-              }`}
-              onMouseEnter={() => setHoveredStore(store._id)}
-              onMouseLeave={() => setHoveredStore(null)}
-            >
-              <div className="h-4 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center text-bloom-green">
-                  <Flower className="h-5 w-5 mr-2 text-bloom-pink" />
-                  {store.name}
-                </CardTitle>
-                <CardDescription>{store.city}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-start">
-                    <MapPin className="h-4 w-4 mr-2 text-bloom-pink shrink-0 mt-1" />
+
+        {!dataLoaded ? (
+          <div className="flex items-center justify-center h-full min-h-[300px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-bloom-pink"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {filteredStores.map((store) => (
+              <Card
+                key={store._id}
+                className={`overflow-hidden transition-all duration-300 border-2 hover:shadow-lg ${
+                  hoveredStore === store._id
+                    ? "border-bloom-pink scale-105"
+                    : "border-gray-100"
+                }`}
+                onMouseEnter={() => setHoveredStore(store._id)}
+                onMouseLeave={() => setHoveredStore(null)}
+              >
+                <div className="h-4 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-bloom-green">
+                    <Flower className="h-5 w-5 mr-2 text-bloom-pink" />
+                    {store.name}
+                  </CardTitle>
+                  <CardDescription>{store.city}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-start">
+                      <MapPin className="h-4 w-4 mr-2 text-bloom-pink shrink-0 mt-1" />
+                      <div>
+                        <p>{store.address}</p>
+                        <p>{store.city} </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <Phone className="h-4 w-4 mr-2 text-bloom-pink shrink-0" />
+                      <p>{store.phone}</p>
+                    </div>
                     <div>
-                      <p>{store.address}</p>
-                      <p>{store.city} </p>
+                      <p className="font-medium text-sm text-gray-700">
+                        Hours:
+                      </p>
+                      <p className="text-sm">
+                        {store.hours
+                          .map(
+                            (hour) =>
+                              `${hour.day}: ${hour.open} - ${hour.close}`
+                          )
+                          .join(", ")}
+                      </p>
+                    </div>
+                    <div className="pt-2">
+                      <Link to={`/stores/${store._id}`}>
+                        <Button
+                          className="w-full bg-bloom-green hover:bg-bloom-green/90 text-white"
+                          variant="default"
+                        >
+                          View Store Details
+                          <ChevronRight className="ml-1 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 mr-2 text-bloom-pink shrink-0" />
-                    <p>{store.phone}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-gray-700">Hours:</p>
-                    <p className="text-sm">{store.hours.map(hour => `${hour.day}: ${hour.open} - ${hour.close}`).join(', ')}</p>
-                  </div>
-                  <div className="pt-2">
-                    <Link to={`/stores/${store._id}`}>
-                      <Button 
-                        className="w-full bg-bloom-green hover:bg-bloom-green/90 text-white"
-                        variant="default"
-                      >
-                        View Store Details
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
         {filteredStores.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-2xl text-bloom-pink">No stores match your search.</p>
+            <p className="text-2xl text-bloom-pink">
+              No stores match your search.
+            </p>
             <p className="text-gray-600 mt-2">Try a different search term!</p>
           </div>
         )}

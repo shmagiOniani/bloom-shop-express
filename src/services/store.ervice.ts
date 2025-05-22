@@ -29,8 +29,8 @@ export const storeService = {
       return response.data;
     },
 
-    apply: async (data: Store) => {
-      const response = await api.post('/stores/apply', data);
+    getStoreById: async (id: string) => {
+      const response = await api.get(`/stores/${id}`);
       return response.data;
     }
 

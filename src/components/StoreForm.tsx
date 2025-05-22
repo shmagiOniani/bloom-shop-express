@@ -9,7 +9,7 @@ import { Plus, Minus } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
 import { Checkbox } from "./ui/checkbox";
 import { useEffect } from "react";
-
+import { useLanguage } from "@/context/LanguageContext";
 interface StoreFormProps {
   onSubmit: (data: Store) => void;
   editingStore: Store | null;
@@ -28,9 +28,10 @@ interface StoreHours {
   isWorkingDay: boolean;
 }
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, description }: StoreFormProps) => {
+  const { t } = useLanguage();
   const defaultHours: StoreHours[] = DAYS.map(day => ({
     day,
     open: '09:00',
@@ -42,14 +43,15 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
 
   useEffect(() => {
     if (editingStore) {
-      form.setValue('hours', editingStore.hours);
+      form.setValue('hours', editingStore?.hours || defaultHours);
+    }else {
+      form.setValue('hours', defaultHours);
     }
   }, [editingStore, form]);
 
-  console.log("defaultHours", defaultHours)
   return (
-    <Card className="lg:col-span-3 border-2 border-gray-100">
-      <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
+    <Card className="overflow-hidden lg:col-span-3 border-2 border-gray-100">
+      <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green animate-gradient-x"/>
       <CardHeader>
         <CardTitle className="flex items-center text-bloom-green">
           <Building2 className="h-5 w-5 mr-2 text-bloom-pink" />
@@ -68,7 +70,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Store Name</FormLabel>
+                    <FormLabel>{t('store.form.name')}</FormLabel>
                     <FormControl>
                       <Input placeholder="Bloom Express Downtown" {...field} />
                     </FormControl>
@@ -82,7 +84,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Address</FormLabel>
+                    <FormLabel>{t('store.form.address')}</FormLabel>
                     <FormControl>
                       <Input placeholder="123 Main St" {...field} />
                     </FormControl>
@@ -96,7 +98,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                 name="city"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>City</FormLabel>
+                    <FormLabel>{t('store.form.city')}</FormLabel>
                     <FormControl>
                       <Input placeholder="Seattle" {...field} />
                     </FormControl>
@@ -110,7 +112,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>{t('store.form.phone')}</FormLabel>
                     <FormControl>
                       <Input placeholder="(206) 555-0123" {...field} />
                     </FormControl>
@@ -122,8 +124,8 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
             
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-bloom-green">Store Hours</h3>
-                <div className="text-sm text-gray-500">All times are in 24-hour format</div>
+                <h3 className="text-lg font-medium text-bloom-green">{t('store.form.hours')}</h3>
+                <div className="text-sm text-gray-500">{t('store.form.hoursDesc')}</div>
               </div>
               
               <div className="bg-gray-50 rounded-lg p-6 space-y-6">
@@ -145,7 +147,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                           </FormItem>
                         )}
                       />
-                      <span className="font-medium text-bloom-green">{day}</span>
+                      <span className="font-medium text-bloom-green">{t(`days.${day}`)}</span>
                       <FormField
                         
                         control={form.control}
@@ -173,7 +175,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                           defaultValue={defaultHours[index].open}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm text-gray-600">Opening Time</FormLabel>
+                              <FormLabel className="text-sm text-gray-600">{t('store.form.open')}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Input 
@@ -198,7 +200,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                           defaultValue={defaultHours[index].close}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm text-gray-600">Closing Time</FormLabel>
+                              <FormLabel className="text-sm text-gray-600">{t('store.form.close')}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Input 
@@ -223,7 +225,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                           defaultValue={defaultHours[index].breakStart}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm text-gray-600">Break Start</FormLabel>
+                              <FormLabel className="text-sm text-gray-600">{t('store.form.breakStart')}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Input 
@@ -248,7 +250,7 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                           defaultValue={defaultHours[index].breakEnd}
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-sm text-gray-600">Break End</FormLabel>
+                              <FormLabel className="text-sm text-gray-600">{t('store.form.breakEnd')}</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Input 
@@ -277,13 +279,13 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                 variant="outline" 
                 onClick={handleCancel}
               >
-                Cancel
+                {t('store.form.cancel')}
               </Button>
               <Button 
                 type="submit" 
                 className="bg-bloom-green hover:bg-bloom-green/90"
               >
-                {editingStore ? 'Update Store' : 'Add Store'}
+                {editingStore ? t('store.form.update') : t('store.form.add')}
               </Button>
             </div>
           </form>

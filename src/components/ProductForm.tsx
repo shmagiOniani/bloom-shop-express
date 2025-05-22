@@ -53,8 +53,8 @@ export const ProductForm = ({selectedStore, editingProduct, form, onSubmit, hand
       .catch((error) => console.error("Error uploading image:", error));
   }
 
-  return  <Card className="lg:col-span-3 border-2 border-gray-100">
-    <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
+  return  <Card className="lg:col-span-3 border-2 border-gray-100 overflow-hidden">
+    <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green animate-gradient-x"></div>
     <CardHeader>
       <CardTitle className="flex items-center text-bloom-green">
         <Package className="h-5 w-5 mr-2 text-bloom-pink" />
@@ -69,7 +69,7 @@ export const ProductForm = ({selectedStore, editingProduct, form, onSubmit, hand
       </CardDescription>
     </CardHeader>
 
-    <div onClick={() => console.log(form.getValues())}>check</div>
+    {/* <div onClick={() => console.log(form.getValues())}>check</div> */}
     <CardContent>
       <Form {...form}>
         <form

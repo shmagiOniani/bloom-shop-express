@@ -8,6 +8,11 @@ export const productService = {
     return response.data;
   },
 
+  getMyProducts: async (params?: any) => {
+    const response = await api.get('/products/myProducts', { params });
+    return response.data;
+  },
+
   getById: async (id: string) => {
     const response = await api.get(`/products/${id}`);
     return response.data;

@@ -18,7 +18,15 @@ const translations = {
     'app.name': 'Bloom Express',
     'language.english': 'English',
     'language.georgian': 'Georgian',
-    
+
+    // Days of the week
+    'days.monday': 'Monday',
+    'days.tuesday': 'Tuesday',
+    'days.wednesday': 'Wednesday',
+    'days.thursday': 'Thursday',
+    'days.friday': 'Friday',
+    'days.saturday': 'Saturday',
+    'days.sunday': 'Sunday',
     // Navigation
     'nav.home': 'Home',
     'nav.shop': 'Shop',
@@ -85,6 +93,34 @@ const translations = {
     'product.notFoundDesc': 'Sorry, we couldn\'t find the product you\'re looking for.',
     'product.continueShopping': 'Continue Shopping',
     
+    // Store management
+    'store.title': 'Store Management',
+    'store.store': 'Store',
+    'store.management': 'Management',
+    'store.add': 'Add New Store',
+    'store.addDesc': 'Fill in the details to add a new store to the chain.',
+    'store.listingsDesc': 'Current stores in your chain',
+    'store.listings': 'Store Listings',
+    'store.accessDenied': 'Access Denied',
+    'store.accessDeniedDesc': 'You don\'t have permission to manage stores.',
+    'store.accessDeniedContact': 'Please contact an administrator if you believe this is an error.',
+    'store.returnToHome': 'Return to Home',
+    'store.storeManagementDesc': 'Add, edit, or delete stores from your chain.',
+
+    // Store Form
+    'store.form.name': 'Store Name',
+    'store.form.address': 'Address',
+    'store.form.city': 'City',
+    'store.form.phone': 'Phone',
+    'store.form.hours': 'Store Hours',
+    'store.form.hoursDesc': 'All times are in 24-hour format',
+    'store.form.open': 'Opening Time',
+    'store.form.close': 'Closing Time',
+    'store.form.breakStart': 'Break Start',
+    'store.form.breakEnd': 'Break End',
+    'store.form.cancel': 'Cancel',
+    'store.form.update': 'Update Store',
+    'store.form.add': 'Add Store',
 
     // Admin panel
     'admin.title': 'Admin Panel',
@@ -118,6 +154,15 @@ const translations = {
     'app.name': 'ბლუმ ექსპრესი',
     'language.english': 'ინგლისური',
     'language.georgian': 'ქართული',
+
+    // Days of the week
+    'days.monday': 'ორშაბათი',
+    'days.tuesday': 'სამშაბათი',
+    'days.wednesday': 'ოთხშაბათი',
+    'days.thursday': 'ხუთშაბათი',
+    'days.friday': 'პარასკევი',
+    'days.saturday': 'შაბათი',
+    'days.sunday': 'კვირა',
     
     // Navigation
     'nav.home': 'მთავარი',
@@ -184,6 +229,35 @@ const translations = {
     'product.notFound': 'პროდუქტი ვერ მოიძებნა',
     'product.notFoundDesc': 'სამწუხაროდ, ვერ ვიპოვეთ თქვენს მიერ მოძებნილი პროდუქტი.',
     'product.continueShopping': 'შოპინგის გაგრძელება',
+
+    // Store management
+    'store.title': 'მაღაზიის მართვა',
+    'store.store': 'მაღაზიის',
+    'store.management': 'მართვა',
+    'store.add': 'ახალი მაღაზიის დამატება',
+    'store.addDesc': 'ქსელში ახალი მაღაზიის დასამატებლად შეავსეთ დეტალები.',
+    'store.listings': 'მაღაზიები',
+    'store.listingsDesc': 'მაღაზიები თქვენს ქსელში',
+    'store.accessDenied': 'წვდომა შეზღუდულია',
+    'store.accessDeniedDesc': 'თქვენ არ გაქვთ მაღაზიების მართვის უფლება.',
+    'store.accessDeniedContact': 'გთხოვთ კონტაქტირების მეშვეობით მაღაზიების მართვის უფლებას თუ გსურს ეს შეცდომა.',
+    'store.returnToHome': 'დაბრუნება მთავარ გვერდზე',
+    'store.storeManagementDesc': 'მაღაზიების დამატება, რედაქტირება ან წაშლა თქვენს ქსელში.',
+
+     // Store Form
+     'store.form.name': 'მაღაზიის დასახელება',
+     'store.form.address': 'მისამართი',
+     'store.form.city': 'ქალაქი',
+     'store.form.phone': 'ტელეფონი',
+     'store.form.hours': 'სამუშაო საათები',
+     'store.form.hoursDesc': 'დრო 24-საათიან ფორმატშია',
+     'store.form.open': 'გახსნა',
+     'store.form.close': 'დახურვა',
+     'store.form.breakStart': 'შესვენების დაწყება',
+     'store.form.breakEnd': 'შესვენების დასრულება',
+     'store.form.cancel': 'გაუქმება',
+     'store.form.update': 'განახლება',
+     'store.form.add': 'დამატება',
 
     // Admin panel
     'admin.title': 'ადმინ პანელი',

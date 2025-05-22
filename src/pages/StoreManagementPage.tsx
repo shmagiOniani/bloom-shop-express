@@ -18,7 +18,7 @@ import { Edit, MapPin, Plus, Trash, ChevronRight, Home } from "lucide-react";
 import { StoreForm } from "@/components/StoreForm";
 import { storeService } from "@/services/store.ervice";
 import { CustomTable } from "@/components/reusable/custom-table/CustomTable";
-
+import { useLanguage } from "@/context/LanguageContext";
 interface StoreApplication {
   _id: string;
   businessName: string;
@@ -37,6 +37,7 @@ interface StoreApplication {
 }
 
 const StoreManagementPage = () => {
+  const { t } = useLanguage();
   const [stores, setStores] = useState<Store[]>(storeData);
   const [applications, setApplications] = useState<StoreApplication[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +79,7 @@ const StoreManagementPage = () => {
   }, []);
 
   const fetchStores = async () => {
-    const response = await storeService.getAllStores();
+    const response = await storeService.getMyStores();
     setStores(response);
   };
 
@@ -140,12 +141,12 @@ const StoreManagementPage = () => {
       <div className="bloom-container py-12 text-center">
         <Card>
           <CardHeader>
-            <CardTitle className="text-bloom-pink">Access Denied</CardTitle>
+            <CardTitle className="text-bloom-pink">{t("store.accessDenied")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>You don't have permission to manage stores.</p>
+            <p>{t("store.accessDeniedDesc")}</p>
             <p className="mt-2">
-              Please contact an administrator if you believe this is an error.
+              {t("store.accessDeniedContact")}
             </p>
           </CardContent>
           <CardFooter>
@@ -153,7 +154,7 @@ const StoreManagementPage = () => {
               onClick={() => navigate("/")}
               className="bg-bloom-green hover:bg-bloom-green/90"
             >
-              Return to Home
+              {t("store.returnToHome")}
             </Button>
           </CardFooter>
         </Card>
@@ -208,23 +209,23 @@ const StoreManagementPage = () => {
             <Home className="h-4 w-4" />
           </Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="text-bloom-pink">Store Management</span>
+          <span className="text-bloom-pink"> {t("store.title")}</span>
         </nav>
 
         <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold text-bloom-green mb-3 relative inline-block">
-            Store <span className="text-bloom-pink">Management</span>
+            {t("store.store")} <span className="text-bloom-pink">{t("store.management")}</span>
             <div className="absolute w-full h-2 bg-bloom-light-pink -bottom-1 left-0 rounded-full transform -rotate-1"></div>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
-            Add, edit, or delete stores from the Bloom Express network.
+            {t("store.storeManagementDesc")} 
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           <StoreForm
-            title="Add New Store"
-            description="Fill in the details to add a new store to the network."
+            title={t("store.add")}
+            description={t("store.addDesc")}
             onSubmit={onSubmit}
             editingStore={editingStore}
             form={form}
@@ -232,15 +233,15 @@ const StoreManagementPage = () => {
           />
         </div>
 
-        <Card className="border-2 border-gray-100">
-          <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green"></div>
+        <Card className="border-2 border-gray-100 overflow-hidden">
+          <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green animate-gradient-x"></div>
           <CardHeader>
             <CardTitle className="flex items-center text-bloom-green">
               <MapPin className="h-5 w-5 mr-2 text-bloom-pink" />
-              Store Listings
+              {t("store.listings")}
             </CardTitle>
             <CardDescription>
-              Current stores in the Bloom Express network
+                {t("store.listingsDesc")}
             </CardDescription>
           </CardHeader>
           <CardContent>

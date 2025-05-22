@@ -46,26 +46,15 @@ const UserMenu = () => {
           {user?.firstName?.split(' ')[0] || t('user.account')}
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>{t('user.account')}</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <Link to="/profile">
-          <DropdownMenuItem className="cursor-pointer">
-            <User className="mr-2 h-4 w-4" />
-            <span>{t('user.profile')}</span>
-          </DropdownMenuItem>
-        </Link>
-        <Link to="/settings">
-          <DropdownMenuItem className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>{t('user.settings')}</span>
-          </DropdownMenuItem>
-        </Link>
-        
-        {hasRole(['manager', 'admin']) && (
+
+      {hasRole(['manager', 'admin']) && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuLabel>{t('user.management')}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+
             <Link to="/store-management">
               <DropdownMenuItem className="cursor-pointer">
                 <Store className="mr-2 h-4 w-4" />
@@ -88,6 +77,23 @@ const UserMenu = () => {
             )}
           </>
         )}
+
+        
+        <DropdownMenuLabel>{t('user.account')}</DropdownMenuLabel>
+        <Link to="/profile">
+          <DropdownMenuItem className="cursor-pointer">
+            <User className="mr-2 h-4 w-4" />
+            <span>{t('user.profile')}</span>
+          </DropdownMenuItem>
+        </Link>
+        <Link to="/settings">
+          <DropdownMenuItem className="cursor-pointer">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>{t('user.settings')}</span>
+          </DropdownMenuItem>
+        </Link>
+        
+        
         
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-500 focus:text-red-500">
