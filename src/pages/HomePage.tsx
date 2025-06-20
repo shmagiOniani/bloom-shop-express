@@ -1,15 +1,25 @@
 
 import { Link } from 'react-router-dom';
-import { getFeaturedProducts, getBestSellers } from '../data/products';
+// import { getFeaturedProducts, getBestSellers } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import StoreCarousel from '../components/StoreCarousel';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { productService } from '@/services/products.service';
+import { useQuery } from '@tanstack/react-query';
 
 const HomePage = () => {
-  const featuredProducts = getFeaturedProducts();
-  const bestSellers = getBestSellers();
   const { t } = useLanguage();
+
+  const {data: featuredProducts, isLoading: featuredProductsLoading} = useQuery({
+    queryKey: ['featuredProducts'],
+    queryFn: () => productService.getFeatured()
+  });
+
+  const {data: bestSellers, isLoading: bestSellersLoading} = useQuery({
+    queryKey: ['bestSellers'],
+    queryFn: () => productService.getBestSellers()
+  });
   
   return (
     <div>
@@ -118,7 +128,7 @@ const HomePage = () => {
           </div>
           
           <div className="product-grid">
-            {featuredProducts.slice(0, 4).map(product => (
+            {featuredProducts?.slice(0, 4).map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -151,7 +161,7 @@ const HomePage = () => {
           <h2 className="text-3xl font-bold text-center mb-8">{t('home.bestSellers.title')}</h2>
           
           <div className="product-grid">
-            {bestSellers.map(product => (
+            {bestSellers?.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

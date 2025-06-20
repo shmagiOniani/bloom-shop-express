@@ -36,7 +36,7 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header userMenu={<UserMenu />} />
-      <main className="flex-grow">
+      <main className="flex-grow bg-bloom-beige">
         <Outlet />
       </main>
       <Footer />

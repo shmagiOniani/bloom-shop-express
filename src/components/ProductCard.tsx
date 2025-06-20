@@ -1,19 +1,19 @@
 
 import { Link } from 'react-router-dom';
 import { Product } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { useFavorite } from '../context/FavoriteContext';
 import { Button } from './ui/button';
-import { ShoppingCart, Flower } from 'lucide-react';
+import { Heart, Flower } from 'lucide-react';
 import { useState } from 'react';
-
+import { useLanguage } from '@/context/LanguageContext';
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const { addToCart } = useCart();
+  const { addToFavorite } = useFavorite();
   const [isHovering, setIsHovering] = useState(false);
-  
+  const { t } = useLanguage();
   return (
     <div 
       className="group rounded-xl overflow-hidden border-2 border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 bg-white relative"
@@ -29,7 +29,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <Link to={`/products/${product._id}`} className="block">
         <div className="aspect-square overflow-hidden">
           <img 
-            src={product.image} 
+            src={product.image[0]} 
             alt={product.name} 
             className="object-cover w-full h-full  transition-transform duration-500"
           />
@@ -44,7 +44,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </Link>
         
         <p className="text-sm text-gray-500 mt-1">
-          {product.category}
+          {product.category.name}
         </p>
         
         <div className="flex items-center justify-between mt-3">
@@ -52,11 +52,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
           
           <Button 
             size="sm"
-            onClick={() => addToCart(product)}
+            onClick={() => addToFavorite(product)}
             className="bloom-button-secondary rounded-full"
           >
-            <ShoppingCart className="h-4 w-4 mr-1" />
-            Add
+            <Heart className="h-4 w-4 " />
+            {/* {t('product.addProduct')} */}
           </Button>
         </div>
       </div>

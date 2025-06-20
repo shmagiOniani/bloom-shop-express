@@ -7,8 +7,10 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/context/AuthContext';
 import { Flower, LogIn } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 const LoginPage = () => {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,21 +41,21 @@ const LoginPage = () => {
       
       if (success) {
         toast({
-          title: "Success!",
-          description: "You've successfully logged in",
+          title: t('login.success'),
+          description: t('login.successText'),
         });
         navigate(from, { replace: true });
       } else {
         toast({
-          title: "Login failed",
-          description: "Invalid email or password",
+          title: t('login.loginFailed'),
+          description: t('login.invalidEmailOrPassword'),
           variant: "destructive"
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "An unexpected error occurred",
+        title: t('login.error'),
+        description: t('login.errorText'),
         variant: "destructive"
       });
     } finally {
@@ -71,20 +73,20 @@ const LoginPage = () => {
               <Flower className="h-6 w-6 text-bloom-pink" />
             </div>
           </div>
-          <CardTitle className="text-2xl text-center text-bloom-green">Welcome Back</CardTitle>
+          <CardTitle className="text-2xl text-center text-bloom-green">{t('login.welcomeBack')}</CardTitle>
           <CardDescription className="text-center">
-            Enter your credentials to access your account
+            {t('login.welcomeBackDesc')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('login.email')}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t('login.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -93,9 +95,9 @@ const LoginPage = () => {
               </div>
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('login.password')}</Label>
                   <Link to="/forgot-password" className="text-sm text-bloom-pink hover:underline">
-                    Forgot password?
+                    {t('login.forgotPassword')}
                   </Link>
                 </div>
                 <Input
@@ -113,26 +115,26 @@ const LoginPage = () => {
                 disabled={isSubmitting}
               >
                 <LogIn className="mr-2 h-4 w-4" />
-                {isSubmitting ? "Signing in..." : "Sign In"}
+                {isSubmitting ? t('login.signingIn') : t('login.signIn')}
               </Button>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <div className="text-center text-sm text-gray-600">
-            Don't have an account?{" "}
+            {t('login.dontHaveAccount')}
             <Link to="/register" className="text-bloom-pink hover:underline">
-              Sign up
+              {t('login.signUp')}
             </Link>
           </div>
           
           <div className="text-center text-sm text-gray-600">
             <span>Demo accounts:</span>
             <div className="mt-2 space-y-1">
-              <div><strong>Manager:</strong> manager@gmail.com | Aa123456#</div>
-              <div><strong>Admin:</strong> admin@gmail.com | Aa123456#</div>
-              <div><strong>Customer:</strong> customer@gmail.com | Aa123456#</div>
-              <div className="mt-1 text-xs text-gray-500">(Use password: "password" for all)</div>
+              <div><strong>Manager:</strong> manager@gmail.com </div>
+              <div><strong>Admin:</strong> admin@gmail.com </div>
+              <div><strong>Customer:</strong> customer@gmail.com </div>
+              <div className="mt-1 text-xs text-gray-500">(Use password: "Aa123456#" for all)</div>
             </div>
           </div>
         </CardFooter>

@@ -5,16 +5,16 @@ export const CustomTable = ({columns, data }: {columns: any[], data: any[]}) => 
     <Table>
       <TableHeader>
         <TableRow>
-          {columns.map((column) => (
-            <TableHead key={column.id}>{column.label}</TableHead>
+          {columns.map((column, index) => (
+            <TableHead key={index}>{column.label}</TableHead>
           ))}
         </TableRow>
       </TableHeader>
       <TableBody>
         {data.map((row) => (
-          <TableRow key={row.id}>
-            {columns.map((column) => (
-              <TableCell key={column.id}>{column.render ? column.render(row) : row[column.id]}</TableCell>
+          <TableRow key={row._id}>
+            {columns.map((column, index) => (
+              <TableCell key={index}>{column.render ? column.render(row) : row[column.id]}</TableCell>
             ))}
           </TableRow>
         ))}

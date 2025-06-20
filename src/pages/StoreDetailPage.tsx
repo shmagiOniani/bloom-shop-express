@@ -4,12 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, Flower, MapPin, Phone, ArrowLeft } from "lucide-react";
 // import { storeData } from "./StoresPage";
-import { getFeaturedProducts } from "../data/products";
+// import { getFeaturedProducts } from "../data/products";
 import ProductCard from "../components/ProductCard";
 // import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { storeService } from "@/services/store.ervice";
 import MyMap from "@/components/Map";
+import { productService } from "@/services/products.service";
+import { useQuery } from "@tanstack/react-query";
 
 const StoreDetailPage = () => {
   const { id } = useParams();
@@ -19,7 +21,11 @@ const StoreDetailPage = () => {
   const [mapLoaded, setMapLoaded] = useState(false);
   // const mapContainer = useRef<HTMLDivElement>(null);
   // const map = useRef<mapboxgl.Map | null>(null);
-  const featuredProducts = getFeaturedProducts().slice(0, 3);
+  // const featuredProducts = getFeaturedProducts().slice(0, 3);
+  const {data: featuredProducts, isLoading: featuredProductsLoading} = useQuery({
+    queryKey: ['featuredProducts'],
+    queryFn: () => productService.getFeatured()
+  });
 
   // Using a proper lookup function to get coordinates as a tuple
   const getStoreCoordinates = (id: string): [number, number] => {

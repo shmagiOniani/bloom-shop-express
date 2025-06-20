@@ -3,21 +3,24 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { CartProvider } from "./context/CartContext";
+import { FavoriteProvider } from "./context/FavoriteContext";
 import { AuthProvider } from "./context/AuthContext";
 import { LanguageProvider } from "./context/LanguageContext";
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
+import FavoritePage from "./pages/FavoritePage";
+// import CheckoutPage from "./pages/CheckoutPage";
 import ThankYouPage from "./pages/ThankYouPage";
 import StoresPage from "./pages/StoresPage";
 import StoreDetailPage from "./pages/StoreDetailPage";
-import StoreManagementPage from "./pages/StoreManagementPage";
-import ProductManagementPage from "./pages/ProductManagementPage";
-import ProfilePage from "./pages/ProfilePage";
-import SettingsPage from "./pages/SettingsPage";
+import ProfileLayout from "./pages/ProfileLayout";
+import Overview from "./pages/profile/Overview";
+import Settings from "./pages/profile/Settings";
+import Stores from "./pages/profile/Stores";
+import Products from "./pages/profile/Products";
+import AddStore from "./pages/profile/AddStore";
+import AddProduct from "./pages/profile/AddProduct";
 import LoginPage from "./pages/LoginPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import NotFound from "./pages/NotFound";
@@ -25,14 +28,15 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPanelPage from "./pages/AdminPanelPage";
 import RegisterPage from "./pages/RegisterPage";
+import PublicRoute from "./components/PublicRoute";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <CartProvider>
-        <LanguageProvider>
+      <LanguageProvider>
+        <FavoriteProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
@@ -42,69 +46,58 @@ const App = () => (
                   <Route index element={<HomePage />} />
                   <Route path="/products" element={<ProductsPage />} />
                   <Route path="/products/:id" element={<ProductDetailPage />} />
-                  <Route path="/cart" element={<CartPage />} />
-                  <Route path="/checkout" element={<CheckoutPage />} />
+                  <Route path="/favorite" element={<FavoritePage />} />
+                  {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
                   <Route path="/thank-you" element={<ThankYouPage />} />
                   <Route path="/stores" element={<StoresPage />} />
                   <Route path="/stores/:id" element={<StoreDetailPage />} />
-                  <Route 
-                    path="/profile" 
+
+                  <Route
+                    path="/profile"
                     element={
                       <ProtectedRoute>
-                        <ProfilePage />
+                        <ProfileLayout />
                       </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/settings" 
-                    element={
-                      <ProtectedRoute>
-                        <SettingsPage />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/store-management" 
-                    element={
-                      <ProtectedRoute requiredRoles={['manager', 'admin']}>
-                        <StoreManagementPage />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/product-management/:id"  
-                    element={
-                      <ProtectedRoute requiredRoles={['manager', 'admin']}>
-                        <ProductManagementPage />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/product-management" 
-                    element={
-                      <ProtectedRoute requiredRoles={['manager', 'admin']}>
-                        <ProductManagementPage />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/admin-panel" 
+                    }
+                  >
+                    <Route path="stores" element={<Stores />} />
+                    <Route path="stores/edit/:id" element={<AddStore />} />
+                    <Route path="products" element={<Products />} />
+                    <Route path="products/edit/:id" element={<AddProduct />} />                    
+                    <Route path="add-product" element={<AddProduct />} />
+                    <Route path="add-store" element={<AddStore />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route index element={<Overview />} />
+                  </Route>
+               
+               
+                 
+                  <Route
+                    path="/admin-panel"
                     element={
                       <ProtectedRoute requiredRoles="admin">
                         <AdminPanelPage />
                       </ProtectedRoute>
-                    } 
+                    }
                   />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={
+                    <PublicRoute>
+                      <RegisterPage />
+                    </PublicRoute>
+                  } />
+                  <Route path="/login" element={
+                    <PublicRoute>
+                      <LoginPage />
+                    </PublicRoute>
+                  } />
                   <Route path="/unauthorized" element={<UnauthorizedPage />} />
                   <Route path="*" element={<NotFound />} />
                 </Route>
               </Routes>
             </BrowserRouter>
           </TooltipProvider>
-        </LanguageProvider>
-      </CartProvider>
+        </FavoriteProvider>
+      </LanguageProvider>
     </AuthProvider>
   </QueryClientProvider>
 );

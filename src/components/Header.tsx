@@ -1,17 +1,17 @@
 
 import { Link } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
-import { ShoppingCart, Menu, X, MapPin, Flower } from 'lucide-react';
+import { Menu, X, MapPin, Flower, Heart } from 'lucide-react';
 import { useState, ReactNode } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
+import { useFavorite } from '@/context/FavoriteContext';
 
 interface HeaderProps {
   userMenu?: ReactNode;
 }
 
 const Header = ({ userMenu }: HeaderProps) => {
-  const { totalItems } = useCart();
+  const { favorite } = useFavorite();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
@@ -45,12 +45,12 @@ const Header = ({ userMenu }: HeaderProps) => {
             {/* User Menu */}
             {userMenu}
             
-            {/* Cart Icon */}
-            <Link to="/cart" className="relative hover:scale-110 transition-transform duration-200">
-              <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-bloom-pink transition-colors" />
-              {totalItems > 0 && (
+            {/* Favorite Icon */}
+            <Link to="/favorite" className="relative hover:scale-110 transition-transform duration-200">
+              <Heart className="h-6 w-6 text-gray-700 hover:text-bloom-pink transition-colors animate-pulse" />
+              {favorite && favorite.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-bloom-pink text-white rounded-full w-5 h-5 flex items-center justify-center text-xs animate-bounce">
-                  {totalItems}
+                  {favorite.length}
                 </span>
               )}
             </Link>

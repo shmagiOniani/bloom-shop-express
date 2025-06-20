@@ -1,11 +1,10 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getProductById } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { useFavorite } from '@/context/FavoriteContext';
 import { toast } from '../components/ui/use-toast';
 import { Button } from '../components/ui/button';
-import { Heart, ShoppingCart, ChevronLeft, Store } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, Store } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { productService } from '@/services/products.service';
 
@@ -22,7 +21,7 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   
   const [quantity, setQuantity] = useState(1);
-  const { addToCart } = useCart();
+  const { addToFavorite } = useFavorite();
   const { t } = useLanguage();
   
   if (!product) {
@@ -38,7 +37,7 @@ const ProductDetailPage = () => {
   }
   
   const handleAddToCart = () => {
-    addToCart(product, quantity);
+    addToFavorite(product, quantity);
   };
   
   const handleQuantityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
