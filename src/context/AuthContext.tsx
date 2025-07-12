@@ -13,6 +13,7 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
+  googleLogin: (token: string) => Promise<boolean>;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -37,6 +38,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setIsLoading(false);
   }, []);
+
+  const googleLogin = async (token: string): Promise<boolean> => {
+
+    try {
+      const data = await authService.googleLogin({ token });
+      console.log('AuthContext data', data);
+      localStorage.setItem('data', JSON.stringify(data));
+      localStorage.setItem('type', typeof data.user);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      setUser(data.user);
+      return true;
+    } catch (error) {
+      console.error('Google login error:', error);
+      return false;
+    }
+  };
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
@@ -87,6 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return (
     <AuthContext.Provider value={{
       user,
+      googleLogin,
       login,
       logout,
       register,

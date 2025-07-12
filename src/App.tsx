@@ -29,77 +29,88 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminPanelPage from "./pages/AdminPanelPage";
 import RegisterPage from "./pages/RegisterPage";
 import PublicRoute from "./components/PublicRoute";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <LanguageProvider>
-        <FavoriteProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="/products" element={<ProductsPage />} />
-                  <Route path="/products/:id" element={<ProductDetailPage />} />
-                  <Route path="/favorite" element={<FavoritePage />} />
-                  {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
-                  <Route path="/thank-you" element={<ThankYouPage />} />
-                  <Route path="/stores" element={<StoresPage />} />
-                  <Route path="/stores/:id" element={<StoreDetailPage />} />
+const App = () => {
 
-                  <Route
-                    path="/profile"
-                    element={
-                      <ProtectedRoute>
-                        <ProfileLayout />
-                      </ProtectedRoute>
-                    }
-                  >
-                    <Route path="stores" element={<Stores />} />
-                    <Route path="stores/edit/:id" element={<AddStore />} />
-                    <Route path="products" element={<Products />} />
-                    <Route path="products/edit/:id" element={<AddProduct />} />                    
-                    <Route path="add-product" element={<AddProduct />} />
-                    <Route path="add-store" element={<AddStore />} />
-                    <Route path="settings" element={<Settings />} />
-                    <Route index element={<Overview />} />
+  useEffect(() => {
+    console.log(import.meta.env);
+  }, []);
+  return(<QueryClientProvider client={queryClient}>
+     <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
+    
+      <AuthProvider>
+        <LanguageProvider>
+          <FavoriteProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="/products" element={<ProductsPage />} />
+                    <Route path="/products/:id" element={<ProductDetailPage />} />
+                    <Route path="/favorite" element={<FavoritePage />} />
+                    {/* <Route path="/checkout" element={<CheckoutPage />} /> */}
+                    <Route path="/thank-you" element={<ThankYouPage />} />
+                    <Route path="/stores" element={<StoresPage />} />
+                    <Route path="/stores/:id" element={<StoreDetailPage />} />
+
+                    <Route
+                      path="/profile"
+                      element={
+                        <ProtectedRoute>
+                          <ProfileLayout />
+                        </ProtectedRoute>
+                      }
+                    >
+                      <Route path="stores" element={<Stores />} />
+                      <Route path="stores/edit/:id" element={<AddStore />} />
+                      <Route path="products" element={<Products />} />
+                      <Route path="products/edit/:id" element={<AddProduct />} />                    
+                      <Route path="add-product" element={<AddProduct />} />
+                      <Route path="add-store" element={<AddStore />} />
+                      <Route path="settings" element={<Settings />} />
+                      <Route index element={<Overview />} />
+                    </Route>
+                
+                
+                  
+                    <Route
+                      path="/admin-panel"
+                      element={
+                        <ProtectedRoute requiredRoles="admin">
+                          <AdminPanelPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path="/register" element={
+                      <PublicRoute>
+                        <RegisterPage />
+                      </PublicRoute>
+                    } />
+                    <Route path="/login" element={
+                      <PublicRoute>
+                        <LoginPage />
+                      </PublicRoute>
+                    } />
+                    <Route path="/unauthorized" element={<UnauthorizedPage />} />
+                    <Route path="*" element={<NotFound />} />
                   </Route>
-               
-               
-                 
-                  <Route
-                    path="/admin-panel"
-                    element={
-                      <ProtectedRoute requiredRoles="admin">
-                        <AdminPanelPage />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="/register" element={
-                    <PublicRoute>
-                      <RegisterPage />
-                    </PublicRoute>
-                  } />
-                  <Route path="/login" element={
-                    <PublicRoute>
-                      <LoginPage />
-                    </PublicRoute>
-                  } />
-                  <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                  <Route path="*" element={<NotFound />} />
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </FavoriteProvider>
-      </LanguageProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </FavoriteProvider>
+        </LanguageProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
+  </QueryClientProvider>)
+}
+
+
 
 export default App;

@@ -72,18 +72,8 @@ const UserMenu = () => {
           <>
           
 
-            <Link to="/store-management">
-              <DropdownMenuItem className="cursor-pointer">
-                <Store className="mr-2 h-4 w-4" />
-                <span>{t("user.storeManagement")}</span>
-              </DropdownMenuItem>
-            </Link>
-            <Link to="/product-management">
-              <DropdownMenuItem className="cursor-pointer">
-                <Package className="mr-2 h-4 w-4" />
-                <span>{t("user.productManagement")}</span>
-              </DropdownMenuItem>
-            </Link>
+         
+         
             {hasRole("admin") && (
               <Link to="/admin-panel">
                 <DropdownMenuItem className="cursor-pointer">

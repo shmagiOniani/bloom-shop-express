@@ -13,6 +13,10 @@ interface LoginData {
   password: string;
 }
 
+interface GoogleLoginData {
+  token: string;
+}
+
 export const authService = {
   register: async (data: RegisterData) => {
     try {
@@ -37,6 +41,16 @@ export const authService = {
     }
   },
 
+  googleLogin: async (data: GoogleLoginData) => {
+    try {
+      const response = await api.post('/auth/google/callback', data);
+      console.log('authService response', response);
+      return response.data;
+    } catch (error) {
+      const apiError = error as ApiError;
+      throw new Error(apiError.message || 'Google login failed');
+    }
+  },
   getCurrentUser: async () => {
     try {
       const response = await api.get('/auth/me');
