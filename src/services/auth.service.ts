@@ -44,7 +44,6 @@ export const authService = {
   googleLogin: async (data: GoogleLoginData) => {
     try {
       const response = await api.post('/auth/google/callback', data);
-      console.log('authService response', response);
       return response.data;
     } catch (error) {
       const apiError = error as ApiError;

@@ -9,7 +9,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const AddStore = () => {
   const { id } = useParams();
-  console.log(id);
   const { t } = useLanguage();
   const [editingStore, setEditingStore] = useState<Store | null>(null);
   const { toast } = useToast();

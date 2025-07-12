@@ -36,9 +36,6 @@ const queryClient = new QueryClient();
 
 const App = () => {
 
-  useEffect(() => {
-    console.log(import.meta.env);
-  }, []);
   return(<QueryClientProvider client={queryClient}>
      <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
     

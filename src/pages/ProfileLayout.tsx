@@ -24,7 +24,6 @@ const ProfileLayout = () => {
     setBreadcrumbs(newBreadcrumbs);
   }, [pathname]);
 
-  console.log(breadcrumbs, pathname)
 
   return (
     <div className="bloom-container py-12">

@@ -3,7 +3,6 @@ import api from '../lib/axios';
 export const libraryService = {
   getCategories: async () => {
     const response = await api.get('/library/productCategory');
-    console.log(response);
     return response.data;
   },
 

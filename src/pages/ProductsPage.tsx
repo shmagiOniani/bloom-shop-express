@@ -226,7 +226,7 @@ const ProductsPage = () => {
         
         <div className="flex flex-col lg:flex-row gap-8 mb-8">
           {/* Desktop Filter Panel */}
-          <div className="hidden lg:block w-64 shrink-0 space-y-8">
+          <div className="bg-bloom-beige p-4 rounded-lg hidden lg:block w-64 shrink-0 space-y-8">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold">Filters</h3>
               {hasActiveFilters && (

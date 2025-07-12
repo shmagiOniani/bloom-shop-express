@@ -7,16 +7,12 @@ const GoogleAuthBtns = () => {
     const { googleLogin } = useAuth();
 
     const handleGoogleLoginSuccess = async (credentialResponse: GoogleCredentialResponse) => {
-      console.log('Google login successful');
 
       try {
-        console.log('credentialResponse', credentialResponse);
         // Send the ID token to your backend for verification
         const res = await googleLogin(credentialResponse.credential);
         if (res) {
-          console.log('GoogleAuthBtns res', res);
-          localStorage.setItem('blaaaaaaaaaaaa', JSON.stringify(res));
-          // navigate('/');
+          navigate('/');
         }
       } catch (error) {
         console.error('Google login failed:', error);

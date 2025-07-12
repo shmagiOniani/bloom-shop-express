@@ -24,7 +24,6 @@ const AddProduct = () => {
       category: product?.category || "",
     },
   });
-  console.log(product, form.getValues());
 
   if (id && product?.storeId) {
     form.setValue("storeId", product?.storeId);

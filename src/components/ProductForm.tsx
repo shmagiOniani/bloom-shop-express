@@ -105,7 +105,6 @@ export const ProductForm = ({
         </CardDescription>
       </CardHeader>
 
-      {/* <div onClick={() => console.log(form.getValues())}>check</div> */}
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

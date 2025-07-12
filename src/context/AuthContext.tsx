@@ -43,7 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       const data = await authService.googleLogin({ token });
-      console.log('AuthContext data', data);
       localStorage.setItem('data', JSON.stringify(data));
       localStorage.setItem('type', typeof data.user);
       localStorage.setItem('user', JSON.stringify(data.user));
