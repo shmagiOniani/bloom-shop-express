@@ -10,6 +10,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./
 import { Checkbox } from "./ui/checkbox";
 import { useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { cities } from "../../public/assets/cities";
 interface StoreFormProps {
   onSubmit: (data: Store) => void;
   editingStore: Store | null;
@@ -100,7 +102,18 @@ export const StoreForm = ({ onSubmit, editingStore, form, handleCancel, title, d
                   <FormItem>
                     <FormLabel>{t('store.form.city')}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Seattle" {...field} />
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="აირჩიეთ ქალაქი" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {cities.map((city) => (
+                            <SelectItem key={city.id} value={city.name}>
+                              {city.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
