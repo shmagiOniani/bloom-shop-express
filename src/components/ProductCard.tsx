@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Heart, Flower } from 'lucide-react';
 import { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { ImageCarousel } from './ui/image-carousel';
 interface ProductCardProps {
   product: Product;
 }
@@ -26,15 +27,22 @@ const ProductCard = ({ product }: ProductCardProps) => {
         <Flower className={`absolute top-2 right-2 w-4 h-4 text-bloom-pink transition-transform duration-500 ${isHovering ? 'rotate-180' : ''}`} />
       </div>
       
-      <Link to={`/products/${product._id}`} className="block">
+      <div className="block">
+      {/* <Link to={`/products/${product._id}`} className="block"> */}
         <div className="aspect-square overflow-hidden">
-          <img 
+          {/* <img 
             src={product.image[0]} 
             alt={product.name} 
             className="object-cover w-full h-full  transition-transform duration-500"
-          />
+          /> */}
+             <ImageCarousel
+                images={product.image}
+                alt={product.name}
+                className="w-full"
+                showNums={false}
+              />
         </div>
-      </Link>
+      </div>
       
       <div className="p-4">
         <Link to={`/products/${product._id}`} className="block">

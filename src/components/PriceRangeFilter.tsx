@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { RangePicker } from './ui/range-picker';
 
 interface PriceRangeFilterProps {
   minPrice: number;
@@ -30,7 +31,16 @@ const PriceRangeFilter = ({ minPrice, maxPrice, onChange }: PriceRangeFilterProp
           ${localRange[0].toFixed(0)} - ${localRange[1].toFixed(0)}
         </div>
       </div>
-      <Slider 
+      <RangePicker
+        defaultValue={[minPrice, maxPrice]}
+        value={localRange}
+        min={minPrice}
+        max={maxPrice}
+        step={1}
+        onValueChange={handleChange}
+        className="w-full"
+      />
+      {/* <Slider 
         defaultValue={[minPrice, maxPrice]}
         value={localRange}
         min={minPrice} 
@@ -38,7 +48,7 @@ const PriceRangeFilter = ({ minPrice, maxPrice, onChange }: PriceRangeFilterProp
         step={1}
         onValueChange={handleChange}
         className="w-full"
-      />
+      /> */}
     </div>
   );
 };
