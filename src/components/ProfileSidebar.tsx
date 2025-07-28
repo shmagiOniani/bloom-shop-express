@@ -10,6 +10,7 @@ const navItems = [
   { to: "/profile/add-store", label: "profile.addStore" , icon: <HousePlus className="h-4 w-4" />},
   { to: "/profile/stores", label: "profile.stores" , icon: <Store className="h-4 w-4" />},
   { to: "/profile/settings", label: "profile.settings" , icon: <Settings className="h-4 w-4" />},
+  { to: "/profile/system-parameters", label: "profile.systemParameters" , icon: <Settings className="h-4 w-4" />},
 ];
 
 const ProfileSidebar = () => {

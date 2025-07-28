@@ -31,6 +31,13 @@ import RegisterPage from "./pages/RegisterPage";
 import PublicRoute from "./components/PublicRoute";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
+import SystemParameters from "./pages/profile/SystemParameters";
+import Categories from "./pages/profile/Categories";
+import Users from "./pages/profile/Users";
+import AddUser from "./pages/profile/AddUser";
+import Locations from "./pages/profile/Locations";
+import SystemSettings from "./pages/profile/SystemSettings";
+import DataManagement from "./pages/profile/DataManagement";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +79,14 @@ const App = () => {
                       <Route path="add-product" element={<AddProduct />} />
                       <Route path="add-store" element={<AddStore />} />
                       <Route path="settings" element={<Settings />} />
+                      <Route path="system-parameters" element={<SystemParameters />} />
+                      <Route path="system-parameters/categories" element={<Categories />} />
+                      <Route path="system-parameters/users" element={<Users />} />
+                      <Route path="system-parameters/users/add" element={<AddUser />} />
+                      <Route path="system-parameters/users/edit/:id" element={<AddUser />} />
+                      <Route path="system-parameters/locations" element={<Locations />} />
+                      <Route path="system-parameters/settings" element={<SystemSettings />} />
+                      <Route path="system-parameters/data" element={<DataManagement />} />
                       <Route index element={<Overview />} />
                     </Route>
                 

@@ -193,6 +193,7 @@ const translations = {
     "profile.addProduct": "Add Product",
     "profile.products": "Products",
     "profile.addStore": "Add Store",
+    "profile.systemParameters": "System Parameters",
     // Store management
     "store.title": "Store Management",
     "store.store": "Store",
@@ -429,6 +430,7 @@ const translations = {
     "profile.stores": "მაღაზიები",
     "profile.profile": "პროფილი",
     "profile.edit": "რედაქტირება",
+    "profile.systemParameters": "სისტემური პარამ.",
 
     // Store management
     "store.title": "მაღაზიის მართვა",

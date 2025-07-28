@@ -32,7 +32,7 @@ const Products = () => {
 
   const columns = [
     { id: "name", label: "Name" },
-    { id: "category", label: "Category", render: (row: Product) => row.category.name },
+    { id: "category", label: "Category", render: (row: Product) => row?.category[0]?.name },
     { id: "price", label: "Price" },
     {
       id: "actions",

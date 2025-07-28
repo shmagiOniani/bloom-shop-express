@@ -29,7 +29,7 @@ import { uploadService } from "@/services/upload.service";
 import { useEffect, useState } from "react";
 import ImageUploader from "./ImageUploader";
 import { useLanguage } from "@/context/LanguageContext";
-import { libraryService } from "@/services/library.service";
+import { productCategoriesService } from "@/services/product-categoies.service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { storeService } from "@/services/store.ervice";
 import { productService } from "@/services/products.service";
@@ -59,12 +59,12 @@ export const ProductForm = ({
       .catch((error) => console.error("Error uploading image:", error));
   };
 
-  const { data: categories, refetch } = useQuery({
+  const { data: categories } = useQuery({
     queryKey: ["categories"],
-    queryFn: () => libraryService.getCategories(),
+    queryFn: () => productCategoriesService.getCategories(),
   });
 
-  const { data: stores, refetch: refetchStores } = useQuery({
+  const { data: stores } = useQuery({
     queryKey: ["stores"],
     queryFn: () => storeService.getMyStores(),
   });
@@ -81,6 +81,7 @@ export const ProductForm = ({
   });
 
   const onSubmit = (data: IProduct) => {
+    console.log(data);
     if (editingProduct) {
       updateProduct(data);
     } else {
@@ -130,7 +131,7 @@ export const ProductForm = ({
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#9ca3af]">
+                    <FormLabel className="text-[#9ca3af]" onClick={() => console.log(categories)}>
                       {t("product.category")}
                     </FormLabel>
                     <Select onValueChange={field.onChange} value={field.value}>
@@ -140,9 +141,9 @@ export const ProductForm = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories?.map((category) => (
+                        {categories?.map((category: any) => (
                           <SelectItem key={category._id} value={category._id}>
-                            {t(`product.${category.name}`)}
+                            {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
