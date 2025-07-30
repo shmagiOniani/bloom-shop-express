@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { ChevronRight, ChevronDown, Plus, Trash2, Edit, Folder, FolderOpen } from "lucide-react";
+import ImageUploader from "@/components/ImageUploader";
+import { uploadService } from "@/services/upload.service";
 
 interface Category {
   _id: string;
@@ -10,15 +12,16 @@ interface Category {
   description: string;
   parentCategory?: string;
   isActive: boolean;
+  images?: string[];
   children?: Category[];
 }
 
 interface CategoryTreeProps {
   categories: Category[];
-  onAddCategory: (parentId: string | null, name: string, description: string) => void;
+  onAddCategory: (parentId: string | null, name: string, description: string, images?: string[]) => void;
   onDeleteCategory: (categoryId: string) => void;
   onEditCategory: (categoryId: string) => void;
-  onUpdateCategory: (categoryId: string, name: string, description: string) => void;
+  onUpdateCategory: (categoryId: string, name: string, description: string, images?: string[]) => void;
   onToggleStatus?: (categoryId: string, isActive: boolean) => void;
 }
 
@@ -29,14 +32,14 @@ const CategoryTreeItem = ({
   onDeleteCategory, 
   onEditCategory,
   onUpdateCategory,
-  onToggleStatus
+  onToggleStatus,
 }: {
   category: Category;
   level?: number;
-  onAddCategory: (parentId: string | null, name: string, description: string) => void;
+  onAddCategory: (parentId: string | null, name: string, description: string, images?: string[]) => void;
   onDeleteCategory: (categoryId: string) => void;
   onEditCategory: (categoryId: string) => void;
-  onUpdateCategory: (categoryId: string, name: string, description: string) => void;
+  onUpdateCategory: (categoryId: string, name: string, description: string, images?: string[]) => void;
   onToggleStatus?: (categoryId: string, isActive: boolean) => void;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -44,19 +47,32 @@ const CategoryTreeItem = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newCategoryDescription, setNewCategoryDescription] = useState("");
+  const [newCategoryImages, setNewCategoryImages] = useState<string[]>([]);
   const [editName, setEditName] = useState(category.name);
   const [editDescription, setEditDescription] = useState(category.description || "");
+  const [editImages, setEditImages] = useState<string[]>(category.images || []);
 
   const hasChildren = category.children && category.children.length > 0;
 
   const handleAddCategory = () => {
     if (newCategoryName.trim()) {
-      onAddCategory(category._id, newCategoryName.trim(), newCategoryDescription.trim());
+      onAddCategory(category._id, newCategoryName.trim(), newCategoryDescription.trim(), newCategoryImages);
       setNewCategoryName("");
       setNewCategoryDescription("");
+      setNewCategoryImages([]);
       setIsAdding(false);
       setIsExpanded(true); // Expand to show the new category
     }
+  };
+
+  const uploadImage = (file: File) => {
+    return uploadService
+      .uploadImage(file)
+      .then((response) => {
+        setNewCategoryImages([...newCategoryImages, response]);
+        return response;
+      })
+      .catch((error) => console.error("Error uploading image:", error));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -71,7 +87,8 @@ const CategoryTreeItem = ({
 
   const handleEditSubmit = () => {
     if (editName.trim()) {
-      onUpdateCategory(category._id, editName.trim(), editDescription.trim());
+      console.log(editImages.concat(newCategoryImages));
+      onUpdateCategory(category._id, editName.trim(), editDescription.trim(), editImages);
       setIsEditing(false);
     }
   };
@@ -178,7 +195,7 @@ const CategoryTreeItem = ({
           className="p-3 bg-blue-50 rounded-lg border border-blue-200"
           style={{ marginLeft: (level + 1) * 16 }}
         >
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Input
               placeholder="Category name"
               value={newCategoryName}
@@ -192,6 +209,15 @@ const CategoryTreeItem = ({
               onChange={(e) => setNewCategoryDescription(e.target.value)}
               onKeyDown={handleKeyPress}
             />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Category Images</label>
+              <ImageUploader
+                value={newCategoryImages}
+                onChange={setNewCategoryImages}
+                uploadImage={uploadImage}
+                maxImages={5}
+              />
+            </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={handleAddCategory}>
                 Add
@@ -203,6 +229,7 @@ const CategoryTreeItem = ({
                   setIsAdding(false);
                   setNewCategoryName("");
                   setNewCategoryDescription("");
+                  setNewCategoryImages([]);
                 }}
               >
                 Cancel
@@ -218,7 +245,7 @@ const CategoryTreeItem = ({
           className="p-3 bg-pink-50 rounded-lg border border-pink-200"
           style={{ marginLeft: (level + 1) * 16 }}
         >
-          <div className="space-y-2">
+          <div className="space-y-4">
             <Input
               placeholder="Category name"
               value={editName}
@@ -232,6 +259,15 @@ const CategoryTreeItem = ({
               onChange={(e) => setEditDescription(e.target.value)}
               onKeyDown={handleEditKeyPress}
             />
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Category Images</label>
+              <ImageUploader
+                value={editImages}
+                onChange={setEditImages}
+                uploadImage={uploadImage}
+                maxImages={5}
+              />
+            </div>
             <div className="flex gap-2">
               <Button size="sm" onClick={handleEditSubmit} className="bg-pink-500 hover:bg-pink-600 text-white">
                 Edit
@@ -243,6 +279,7 @@ const CategoryTreeItem = ({
                   setIsEditing(false);
                   setEditName(category.name);
                   setEditDescription(category.description || "");
+                  setEditImages(category.images || []);
                 }}
               >
                 Cancel

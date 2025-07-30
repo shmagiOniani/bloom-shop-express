@@ -164,7 +164,7 @@ const ProductsPage = () => {
   return (
     <div className="py-8">
       <div className="bloom-container">
-        <div className="text-center mb-10">
+        {/* <div className="text-center mb-10">
           <h1 className="text-4xl md:text-5xl font-bold text-bloom-green mb-3 relative inline-block">
             Shop Our <span className="text-bloom-pink">Flowers</span>
             <div className="absolute w-full h-2 bg-bloom-light-pink -bottom-1 left-0 rounded-full transform -rotate-1"></div>
@@ -172,10 +172,10 @@ const ProductsPage = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
             Brighten someone's day with our beautiful blooms!
           </p>
-        </div>
+        </div> */}
         
         {/* Quick Search */}
-        <div className="max-w-xl mx-auto mb-8">
+        {/* <div className="max-w-xl mx-auto mb-8">
           <div className="relative">
             <Input 
               type="text"
@@ -194,7 +194,7 @@ const ProductsPage = () => {
               </kbd>
             </button>
           </div>
-        </div>
+        </div> */}
         
         {/* Command Dialog for quick search */}
         <CommandDialog open={open} onOpenChange={setOpen}>

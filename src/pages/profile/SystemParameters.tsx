@@ -55,19 +55,19 @@ const SystemParameters = () => {
 
     return (
         <div className="space-y-6">
-            <Card className="lg:col-span-3 border-2 border-gray-100 overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green animate-gradient-x"></div>
-                <CardHeader>
-                    <CardTitle className="flex items-center text-bloom-green">
-                        <Package className="h-5 w-5 mr-2 text-bloom-pink" />
+        <Card className="lg:col-span-3 border-2 border-gray-100 overflow-hidden">
+        <div className="h-2 bg-gradient-to-r from-bloom-light-pink to-bloom-light-green animate-gradient-x"></div>
+        <CardHeader>
+          <CardTitle className="flex items-center text-bloom-green">
+            <Package className="h-5 w-5 mr-2 text-bloom-pink" />
                         System Parameters
-                    </CardTitle>
-                    <CardDescription>
+          </CardTitle>
+          <CardDescription>
                         Manage system libraries and configuration parameters
-                    </CardDescription>
-                </CardHeader>
-
-                <CardContent>
+          </CardDescription>
+        </CardHeader>
+  
+        <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {systemParams.map((param) => {
                             const IconComponent = param.icon;
@@ -92,8 +92,8 @@ const SystemParameters = () => {
                             );
                         })}
                     </div>
-                </CardContent>
-            </Card>
+        </CardContent>
+      </Card>
         </div>
     );
 };

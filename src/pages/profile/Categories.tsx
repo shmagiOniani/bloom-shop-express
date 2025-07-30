@@ -40,7 +40,7 @@ const Categories = () => {
   });
 
   const { mutate: addCategory } = useMutation({
-    mutationFn: (data: { name: string; description: string; parentCategory?: string }) => 
+    mutationFn: (data: { name: string; description: string; parentCategory?: string; images?: string[] }) => 
       productCategoriesService.addCategory(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
@@ -48,8 +48,8 @@ const Categories = () => {
   });
 
   const { mutate: updateCategory } = useMutation({
-    mutationFn: (data: { id: string; name: string; description: string }) => 
-      productCategoriesService.updateCategory(data.id, { name: data.name, description: data.description }),
+    mutationFn: (data: { id: string; name: string; description: string; images?: string[] }) => 
+      productCategoriesService.updateCategory(data.id, { name: data.name, description: data.description, images: data.images }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
     },
@@ -63,19 +63,22 @@ const Categories = () => {
     },
   });
 
-  const handleAddCategory = (parentId: string | null, name: string, description: string) => {
+  const handleAddCategory = (parentId: string | null, name: string, description: string, images?: string[]) => {
     addCategory({
       name,
       description,
-      parentCategory: parentId || undefined
+      parentCategory: parentId || undefined,
+      images
     });
   };
 
-  const handleUpdateCategory = (categoryId: string, name: string, description: string) => {
+  const handleUpdateCategory = (categoryId: string, name: string, description: string, images?: string[]) => {
+    console.log("images", images);
     updateCategory({
       id: categoryId,
       name,
-      description
+      description,
+      images
     });
   };
 
